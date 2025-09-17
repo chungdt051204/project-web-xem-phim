@@ -1,0 +1,7 @@
+.search-result-track {
+  display: flex;
+  gap: 20px;
+}
+.search-result-item {
+  width: 250px;
+}

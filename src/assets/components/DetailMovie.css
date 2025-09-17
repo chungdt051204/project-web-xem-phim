@@ -1,0 +1,72 @@
+.movie-detail {
+  display: flex;
+  width: 1100px;
+  height: 1000px;
+  margin: 50px auto;
+  border-radius: 5px;
+  background-color: rgba(15, 20, 22, 1);
+  color: white;
+}
+.movie-detail > .movie-detail-wrapper {
+  width: 1000px;
+  margin: 40px auto;
+}
+.movie-detail-wrapper > .movie-detail-content {
+  display: flex;
+  gap: 30px;
+}
+.movie-detail-wrapper > button {
+  padding: 15px 15px;
+  margin: 20px 0;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  background-color: rgba(183, 28, 28, 1);
+  transition: 0.3s;
+}
+.movie-detail-wrapper > button:hover {
+  background-color: rgba(38, 50, 56, 1);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.movie-detail-content > img {
+  border-radius: 4px;
+}
+.movie-detail-info > h2 {
+  color: rgba(181, 231, 69, 1);
+}
+.movie-detail-info > .movie-detail-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 10px 0;
+}
+.movie-detail-stats > .movie-detail-progress {
+  width: 50px;
+  height: 50px;
+}
+.movie-detail-stats > .movie-detail-rating-year {
+  display: flex;
+  flex-direction: column;
+}
+.movie-detail-rating-year > .movie-detail-rating-year-star {
+  display: flex;
+}
+.movie-detail-rating-year-star > .movie-detail-year {
+  margin-left: 50px;
+}
+.movie-detail-info > .movie-detail-genre {
+  display: flex;
+  gap: 7px;
+}
+.movie-detail-genre a {
+  color: rgba(181, 231, 69, 1);
+  text-decoration: none;
+  transition: 0.3s;
+}
+.movie-detail-genre a:hover {
+  opacity: 0.5;
+  transition: 0.3s;
+}

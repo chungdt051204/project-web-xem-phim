@@ -1,0 +1,30 @@
+.auth {
+  height: 100vh;
+  background-image: url(../background.jpg);
+  background-size: cover;
+}
+.auth > .form-auth {
+  width: 500px;
+  margin: auto;
+}
+.form-auth > h2,
+.form-auth > p {
+  text-align: center;
+  color: white;
+}
+.form-auth > form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 260px;
+  padding: 20px 40px;
+  margin: auto;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.886);
+}
+.form-auth > p > strong > a {
+  text-decoration: none;
+}
+.form-auth > p > strong > a:hover {
+  color: #008cff;
+}

@@ -1,0 +1,27 @@
+.carousel {
+  width: 1000px;
+  margin: 50px auto;
+}
+.carousel > .carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+.carousel > .carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track > .carousel-item > a > img {
+  border-radius: 5px;
+}
+.carousel > .dots {
+  display: flex;
+  gap: 10px;
+  width: 150px;
+  margin: auto;
+}
+.dots > .dot-item {
+  width: 12px;
+  height: 12px;
+  border: 1px solid white;
+  border-radius: 50%;
+}

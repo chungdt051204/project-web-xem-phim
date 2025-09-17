@@ -1,0 +1,93 @@
+#root {
+  max-width: 1280px;
+  background-color: rgba(38, 50, 56, 1);
+  font-family: Arial, Helvetica, sans-serif;
+}
+form > label {
+  color: white;
+}
+form > input {
+  width: 200px;
+  height: 24px;
+  border-radius: 5px;
+}
+form > input:focus {
+  border: 2px solid blue !important;
+  outline: none !important;
+}
+form > #avatar {
+  color: white;
+}
+form > .error {
+  font-size: 12px;
+  color: red;
+}
+form > .btn-form {
+  width: 60%;
+  height: 40px;
+  margin: 20px auto;
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 1000px;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-form:hover {
+  color: white;
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+a,
+h1,
+h2,
+h4 {
+  color: white;
+  text-decoration: none;
+}
+a > h4,
+a > strong {
+  transition: 0.3s;
+}
+a > h4:hover,
+h4:hover,
+a > strong:hover {
+  opacity: 0.5;
+  transition: 0.3s;
+  cursor: pointer;
+}
+a > img,
+img {
+  border-radius: 3px 3px 0 0;
+}
+.rating-star {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 8px 8px;
+  color: yellow;
+  font-size: 12px;
+  border-radius: 1000px;
+  background-color: rgba(0, 0, 0, 0.55);
+}
+.fa-star {
+  font-size: 12px;
+}
+.play {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 70px;
+  left: 50px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.607);
+  cursor: pointer;
+  z-index: 1;
+}
+.fa-play {
+  color: white;
+  font-size: 14px;
+}

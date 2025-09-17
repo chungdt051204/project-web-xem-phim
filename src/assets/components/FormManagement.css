@@ -1,0 +1,39 @@
+.form-management-container {
+  width: 1150px;
+  padding: 20px;
+  margin: 30px auto 0;
+  color: white;
+  background-color: rgba(15, 20, 22, 1);
+}
+.form-management-container > .form-management {
+  display: flex;
+  gap: 50px;
+  width: 520px;
+  padding: 20px;
+  border-radius: 4px;
+  background-color: rgba(38, 50, 56, 1);
+}
+.form-management > .form-management-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-management-info > textarea {
+  width: 250px;
+}
+.form-management-info > button {
+  width: 75%;
+  margin: 10px 0;
+  padding: 8px 12px;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 3px;
+  background-color: rgba(183, 28, 28, 1);
+  transition: 0.3s;
+}
+.form-management-info > button:hover {
+  background-color: rgba(183, 28, 28, 0.8);
+  transition: 0.3s;
+  cursor: pointer;
+}

@@ -1,0 +1,36 @@
+.favorite-movies-container {
+  width: 1100px;
+  height: 100vh;
+  margin: auto;
+  color: white;
+}
+.favorite-movies-container > .favorite-movies {
+  padding: 30px 0;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  background-color: rgba(15, 20, 22, 1);
+}
+.favorite-movies > .favorite-movies-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 1000px;
+  margin: auto;
+}
+.favorite-movies-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+  width: 150px;
+}
+.favorite-movies-item > .fa-trash {
+  transition: 0.3s;
+}
+.favorite-movies-item > .fa-trash:hover {
+  color: red;
+  transition: 0.3s;
+  cursor: pointer;
+}
