@@ -1,93 +1,164 @@
+@import "tailwindcss";
 #root {
   max-width: 1280px;
   background-color: rgba(38, 50, 56, 1);
   font-family: Arial, Helvetica, sans-serif;
 }
-form > label {
-  color: white;
+::-webkit-scrollbar {
+  display: none;
 }
-form > input {
-  width: 200px;
-  height: 24px;
-  border-radius: 5px;
+.form-auth-container {
+  @apply h-[100vh] bg-cover;
+  background-image: url(./assets/background.jpg);
 }
-form > input:focus {
-  border: 2px solid blue !important;
-  outline: none !important;
+.form-auth-container > .form-auth {
+  @apply flex flex-col w-[500px] mx-auto;
 }
-form > #avatar {
-  color: white;
+.form-auth h2 {
+  @apply text-center text-[24px] font-bold;
 }
-form > .error {
-  font-size: 12px;
-  color: red;
+.form-auth > form {
+  @apply flex flex-col gap-[8px] w-[300px] py-[20px] px-[40px] mx-auto my-[5px] rounded-[5px];
+  background: rgba(0, 0, 0, 0.886);
 }
-form > .btn-form {
-  width: 60%;
-  height: 40px;
-  margin: 20px auto;
-  color: black;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 1000px;
+.form-auth p {
+  @apply text-center text-white;
+}
+.form-auth a {
+  @apply mx-[5px];
+}
+.form-auth a:hover {
+  @apply text-[#008cff];
+}
+form label {
+  @apply text-white;
+}
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"] {
+  @apply w-[210px] h-[25px] p-[6px] bg-white rounded-[5px];
+}
+form input[type="file"] {
+  @apply w-[92px]  p-[3px] text-white bg-[#008cff] rounded-[5px];
+}
+form input[type="file"]:hover {
+  @apply text-black;
+}
+form input:focus {
+  @apply border-2 border-blue-700 outline-0 scale-y-110;
+}
+form input[name="year"],
+form input[name="rating"] {
+  @apply w-[100px];
+}
+form textarea {
+  @apply bg-white rounded-[5px];
+}
+form .error {
+  @apply text-[12px] text-red-500;
+}
+form .btn-form {
+  @apply w-[60%] h-[40px] my-[20px] mx-auto text-black text-[15px] font-bold border-0 rounded-[1000px] cursor-pointer transition-all duration-300;
   background: linear-gradient(to bottom right, #008cff, #e100ff);
-  cursor: pointer;
-  transition: 0.3s;
 }
 .btn-form:hover {
-  color: white;
-  transform: scale(1.1);
-  transition: 0.3s;
+  @apply text-white scale-110 transition-all duration-300;
+}
+/* Làm mờ background khi hiện dialog */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(1px);
 }
 a,
 h1,
 h2,
 h4 {
-  color: white;
-  text-decoration: none;
+  @apply text-white decoration-0;
 }
 a > h4,
 a > strong {
-  transition: 0.3s;
+  @apply transition-all duration-300;
 }
 a > h4:hover,
 h4:hover,
 a > strong:hover {
-  opacity: 0.5;
+  @apply opacity-50 transition-all duration-300 cursor-pointer;
+}
+.rating-star {
+  @apply absolute top-[5px] start-[5px] p-[8px] text-[12px] rounded-[1000px];
+  color: yellow;
+  background-color: rgba(0, 0, 0, 0.55);
+}
+.play {
+  @apply absolute w-[55px] h-[55px] top-[70px] start-[50px] border-2 border-white rounded-[50%] cursor-pointer;
+  background-color: rgba(0, 0, 0, 0.607);
+}
+.filter-dropdown-menu {
+  @apply absolute flex flex-wrap gap-[10px] w-[650px] mt-[10px] py-[15px] px-[10px] rounded-[10px] bg-white;
+}
+.filter-dropdown-menu-button {
+  @apply relative flex justify-center items-center py-[5px] px-[15px] 
+  border-0 rounded-[1000px] text-black bg-white transition-all duration-300 
+  cursor-pointer;
+}
+.filter-dropdown-menu-button::after {
+  position: absolute;
+  content: "";
+  width: 102%;
+  height: 107%;
+  border-radius: 1000px;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+  z-index: -1;
+}
+.filter-dropdown-menu-button:hover {
+  @apply text-white z-0 scale-110 transition-all 
+ duration-300;
+}
+.user-dropdown-link {
+  @apply flex items-center gap-[5px];
+}
+.btn-nav,
+.btn-dialog {
+  @apply mx-auto py-[8px] px-[20px] border-0 rounded-[1000px] text-white cursor-pointer transition-all duration-300;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+}
+.btn-nav:hover,
+.btn-dialog:hover {
+  @apply text-black scale-110 transition-all duration-300;
+}
+.btn-add,
+.btn-random {
+  @apply p-[8px] text-[16px] text-white border-none rounded-[3px];
+  background-color: rgb(183, 28, 28);
+  transition: 0.3s;
+}
+.btn-add:hover {
+  background-color: rgb(38, 50, 56);
   transition: 0.3s;
   cursor: pointer;
 }
-a > img,
-img {
-  border-radius: 3px 3px 0 0;
-}
-.rating-star {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  padding: 8px 8px;
-  color: yellow;
-  font-size: 12px;
-  border-radius: 1000px;
-  background-color: rgba(0, 0, 0, 0.55);
-}
-.fa-star {
-  font-size: 12px;
-}
-.play {
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 70px;
-  left: 50px;
-  border: 2px solid white;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.607);
+.btn-random:hover {
+  background-color: rgba(183, 28, 28, 0.6);
+  transition: 0.3s;
   cursor: pointer;
-  z-index: 1;
 }
-.fa-play {
-  color: white;
-  font-size: 14px;
+.btn-pagination {
+  @apply py-[10px] px-[15px] text-[16px] font-bold border-0 rounded-[2px] transition-all duration-300;
+  background-color: rgba(33, 37, 39, 1);
+  color: gainsboro;
+}
+.btn.btn-pagination:hover {
+  @apply text-white cursor-pointer;
+  background-color: rgba(181, 231, 69, 1);
+}
+.fa-trash,
+.fa-pen {
+  @apply text-white transition-all duration-300;
+}
+.fa-trash:hover {
+  @apply text-red-500 transition-all duration-300 cursor-pointer;
+}
+.fa-pen:hover {
+  @apply text-blue-500 transition-all duration-300 cursor-pointer;
 }

@@ -1,33 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import AppContext from "./AppContext";
 import { baseApi } from "./Register";
 import SearchBar from "./SearchBar";
-import "./NavBar.css";
 export default function NavBar({ isClicked, setIsClicked }) {
   const navigate = useNavigate();
-  const { isLogin, setIsLogin, isAdmin, avatar } = useContext(AppContext);
+  const { isLogin, setIsLogin, isAdmin, avatar, categories, movies } =
+    useContext(AppContext);
   const [onMouseGenre, setOnMouseGenre] = useState(false);
   const [onMouseYear, setOnMouseYear] = useState(false);
-  const [uniqueGenres, setUniqueGenres] = useState([]);
-  const [uniqueYears, setUniqueYears] = useState([]);
   const [clicked, setClicked] = useState(false);
-  useEffect(() => {
-    //Lấy giá trị thể loại không trùng từ database
-    fetch(`${baseApi}/unique-genres`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUniqueGenres(data);
-      });
-  }, []);
-  useEffect(() => {
-    //Lấy giá trị năm không trùng từ database
-    fetch(`${baseApi}/unique-years`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUniqueYears(data);
-      });
-  }, []);
+  const uniqueYear = [
+    ...new Set(
+      movies?.map((value) => {
+        return value.year;
+      })
+    ),
+  ]; //Phương thức Set tạo mảng mới không có giá trị trùng
   //Chức năng đăng xuất
   const handleClick = () => {
     setIsLogin(false);
@@ -51,38 +40,46 @@ export default function NavBar({ isClicked, setIsClicked }) {
   };
   return (
     <section>
-      <nav>
-        <ul>
+      <nav
+        className="h-[100px] py-[15px] px-0 text-white"
+        style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
+      >
+        <ul className="flex justify-around my-[15px]">
           <li>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <a href="">🎬 StudentMovie</a>
+          </li>
+          <li className="text-white list-none hover:cursor-pointer">
+            <div className="flex gap-[5px]">
               <i className="fa-solid fa-house"></i>
-              <strong
+              <div
                 onClick={() => {
                   setIsClicked(false);
                   navigate("/");
                 }}
               >
                 TRANG CHỦ
-              </strong>
+              </div>
             </div>
           </li>
           <li
             onMouseEnter={() => setOnMouseGenre(true)}
             onMouseLeave={() => setOnMouseGenre(false)}
           >
-            <div>
-              <strong>THỂ LOẠI</strong>
+            <div className="flex">
+              <div className="hover:cursor-pointer">THỂ LOẠI</div>
               <i className="fa-solid fa-angle-down"></i>
             </div>
-            {uniqueGenres.length > 0 && onMouseGenre && (
+            {onMouseGenre && (
               <div className="filter-dropdown-menu">
-                {uniqueGenres.map((value, index) => {
+                {categories?.map((value) => {
                   return (
-                    <div className="filter-dropdown-menu-item" key={index}>
+                    <div className="filter-dropdown-menu-item" key={value._id}>
                       <Link
-                        to={`/filter/genre?genre=${encodeURIComponent(value)}`}
+                        to={`/filter?genre=${encodeURIComponent(value.name)}`}
                       >
-                        <button> {value}</button>
+                        <button className="filter-dropdown-menu-button">
+                          {value.name}
+                        </button>
                       </Link>
                     </div>
                   );
@@ -94,19 +91,19 @@ export default function NavBar({ isClicked, setIsClicked }) {
             onMouseEnter={() => setOnMouseYear(true)}
             onMouseLeave={() => setOnMouseYear(false)}
           >
-            <div>
-              <strong>NĂM</strong>
+            <div className="flex">
+              <div className="hover:cursor-pointer">NĂM</div>
               <i className="fa-solid fa-angle-down"></i>
             </div>
-            {uniqueYears.length > 0 && onMouseYear && (
-              <div className="filter-dropdown-menu">
-                {uniqueYears.map((value, index) => {
+            {onMouseYear && (
+              <div className="filter-dropdown-menu" style={{ width: "450px" }}>
+                {uniqueYear?.map((value, index) => {
                   return (
                     <div className="filter-dropdown-menu-item" key={index}>
-                      <Link
-                        to={`/filter/year?year=${encodeURIComponent(value)}`}
-                      >
-                        <button> {value}</button>
+                      <Link to={`/filter?year=${encodeURIComponent(value)}`}>
+                        <button className="filter-dropdown-menu-button">
+                          {value}
+                        </button>
                       </Link>
                     </div>
                   );
@@ -120,12 +117,15 @@ export default function NavBar({ isClicked, setIsClicked }) {
           <li>
             <div className="user">
               {isLogin ? (
-                <div className="user-dropdown">
+                <div className="flex items-start">
                   <img
-                    src={`${baseApi}/images/${avatar}`}
+                    className="w-[50px] h-[50px] border-2 border-blue-500 rounded-[50%]"
+                    src={
+                      avatar && avatar.includes("https")
+                        ? avatar
+                        : `${baseApi}/images/${avatar}`
+                    }
                     alt=""
-                    width={50}
-                    height={50}
                     onClick={() => setClicked((prev) => !prev)}
                   />
                   {clicked ? (
@@ -141,7 +141,11 @@ export default function NavBar({ isClicked, setIsClicked }) {
               )}
             </div>
             {isLogin && clicked && (
-              <div className="user-dropdown-menu">
+              <div
+                className="absolute flex flex-col gap-[20px] w-[220px] 
+                 p-[20px] end-[75px] rounded-[5px]"
+                style={{ backgroundColor: "rgb(30, 30, 30)" }}
+              >
                 {isAdmin && (
                   <Link className="user-dropdown-link" to="/admin">
                     <i className="fa-solid fa-unlock"></i>
@@ -153,7 +157,7 @@ export default function NavBar({ isClicked, setIsClicked }) {
                   <strong>Thông tin tài khoản</strong>
                 </Link>
                 <Link className="user-dropdown-link" to="/user/favorite-movies">
-                  <i class="fa-solid fa-heart"></i>
+                  <i className="fa-solid fa-heart"></i>
                   <strong>Phim yêu thích</strong>
                 </Link>
                 <button className="btn-nav" onClick={handleClick}>

@@ -1,11 +1,7 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import { baseApi } from "./Register";
-import NavBar from "./NavBar";
-import "./FormManagement.css";
-export default function AddMovie() {
-  const navigate = useNavigate();
-  const [isClicked, setIsClicked] = useState(false);
+
+export default function AddMovie({ ref }) {
   const [err, setErr] = useState("");
   const title = useRef();
   const description = useRef();
@@ -50,17 +46,22 @@ export default function AddMovie() {
       })
       .then(({ message }) => {
         console.log(message);
-        navigate("/admin");
+        ref.current.close();
       })
       .catch();
   };
   return (
     <>
-      <NavBar isClicked={isClicked} setIsClicked={setIsClicked} />
-      <section className="form-management-container">
-        <h2>Thêm phim</h2>
-        <div className="form-management">
-          <form className="form-management-info">
+      <dialog
+        ref={ref}
+        className="fixed w-[550px] top-[100px] start-[400px] px-[10px] py-[25px] rounded-[5px] bg-black "
+      >
+        <form
+          method="dialog"
+          onSubmit={handleSubmit}
+          className="flex justify-evenly w-[510px] m-auto"
+        >
+          <div className="flex flex-col">
             <label htmlFor="Title">Tiêu đề:</label>
             <input type="text" id="title" name="title" ref={title} />
             <label htmlFor="Description">Mô tả:</label>
@@ -77,10 +78,10 @@ export default function AddMovie() {
               name="thumbnail"
               ref={thumbnail}
             />
+          </div>
+          <div className="flex flex-col">
             <label htmlFor="VideoUrl">Link Video:</label>
             <input type="text" id="video-url" name="video-url" ref={videoUrl} />
-          </form>
-          <form className="form-management-info" onSubmit={handleSubmit}>
             <label htmlFor="Year">Năm:</label>
             <input
               type="number"
@@ -107,10 +108,10 @@ export default function AddMovie() {
             <label htmlFor="Poster">Poster:</label>
             <input type="file" id="poster" name="poster" ref={poster} />
             {err && <strong className="error">{err}</strong>}
-            <button>Thêm</button>
-          </form>
-        </div>
-      </section>
+            <button className="btn-form">Thêm</button>
+          </div>
+        </form>
+      </dialog>
     </>
   );
 }

@@ -9,17 +9,21 @@ import ListMovies from "./assets/components/ListMovies";
 import Result from "./assets/components/Result";
 import Admin from "./assets/components/Admin";
 import DetailMovieWithId from "./assets/components/DetailMovieWithId";
+import DetailMovieWithName from "./assets/components/DetailMovieWithName";
 import FilterResultWithGenre from "./assets/components/FilterResultWithGenre";
 import FilterResultWithYear from "./assets/components/FilterResultWithYear";
 import User from "./assets/components/User";
-import AddMovie from "./assets/components/AddMovie";
-import UpdateMovie from "./assets/components/UpdateMovie";
-import DetailMovieWithName from "./assets/components/DetailMovieWithName";
 import SearchResult from "./assets/components/SearchResult";
 import Pagination from "./assets/components/Pagination";
 import FavoriteMovies from "./assets/components/FavoriteMovies";
+export const url = "http://localhost:3000";
 import "./App.css";
+import fetchApi from "./assets/service/api";
+import DetailMovie from "./assets/components/DetailMovie";
+import MovieWithQueryString from "./assets/components/MovieWithQueryString";
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [refresh, setRefresh] = useState(0);
   const [isLogin, setIsLogin] = useState(false);
   const [id, setId] = useState("");
   const [username, setUsername] = useState("");
@@ -28,9 +32,11 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [createdAt, setCreatedAt] = useState(Date.now);
+  const [categories, setCategories] = useState([]);
   const [movies, setMovies] = useState([]);
   const [moviesPage1, setMoviesPage1] = useState([]);
   const [moviesPage2, setMoviesPage2] = useState([]);
+  const [moviePage3, setMoviePage3] = useState([]);
   useEffect(() => {
     fetch(`${baseApi}/user`, {
       credentials: "include",
@@ -51,15 +57,16 @@ function App() {
         setAvatar(data.avatar);
         setCreatedAt(data.createdAt);
       })
-      .catch();
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []); //useEffect chạy mỗi khi component mount
   useEffect(() => {
-    fetch(`${baseApi}/listMovies`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMovies(data);
-      });
-  });
+    fetchApi({ url: `${url}/category`, setData: setCategories });
+  }, [refresh, isLoading]);
+  useEffect(() => {
+    fetchApi({ url: `${url}/movie`, setData: setMovies });
+  }, [refresh, isLoading]);
   useEffect(() => {
     fetch(`${baseApi}/listMovies-page1`)
       .then((res) => res.json())
@@ -72,6 +79,13 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setMoviesPage2(data);
+      });
+  }, []);
+  useEffect(() => {
+    fetch(`${baseApi}/listMovies-page3`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMoviePage3(data);
       });
   }, []);
   return (
@@ -88,6 +102,7 @@ function App() {
           avatar,
           setAvatar,
           createdAt,
+          categories,
           movies,
         }}
       >
@@ -122,22 +137,34 @@ function App() {
               />
             }
           />
-          <Route path="search" element={<Home content1={<SearchResult />} />} />
           <Route
-            path="filter/genre"
-            element={<Home content1={<FilterResultWithGenre />} />}
+            path="/movies-page3"
+            element={
+              <Home
+                content1={<ListMovies />}
+                content2={
+                  <Result
+                    data={moviePage3}
+                    content="Tất cả phim"
+                    buttons={<Pagination />}
+                  />
+                }
+              />
+            }
           />
           <Route
-            path="filter/year"
-            element={<Home content1={<FilterResultWithYear />} />}
+            path="/search"
+            element={<Home content2={<SearchResult />} />}
           />
-          <Route path="/movie/:id" element={<DetailMovieWithId />} />
+          <Route
+            path="/filter"
+            element={<Home content2={<MovieWithQueryString />} />}
+          />
+          <Route path="/movie/detail" element={<DetailMovie />} />
           <Route path="/movie" element={<DetailMovieWithName />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/movie" element={<AddMovie />} />
-          <Route path="/admin/movie/:id" element={<UpdateMovie />} />
           <Route path="/user/info" element={<User />} />
           <Route path="/user/favorite-movies" element={<FavoriteMovies />} />
         </Routes>

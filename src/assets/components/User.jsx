@@ -3,7 +3,8 @@ import { useContext, useRef, useState } from "react";
 import AppContext from "./AppContext";
 import { baseApi } from "./Register";
 import NavBar from "./NavBar";
-import "./FormManagement.css";
+import Footer from "./Footer";
+
 export default function User() {
   const { username, email, password, avatar, createdAt } =
     useContext(AppContext);
@@ -47,19 +48,29 @@ export default function User() {
       .catch();
   };
   return (
-    <>
+    <section>
       <NavBar isClicked={isClicked} setIsClicked={setIsClicked} />
-      <section className="form-management-container">
-        <h2>THÔNG TIN TÀI KHOẢN</h2>
-        <div className="form-management">
-          <div>
+      <div
+        className="w-[1150px] p-[20px] mt-[30px] mx-auto"
+        style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
+      >
+        <h2 className="text-[20px] font-bold">THÔNG TIN TÀI KHOẢN</h2>
+        <div
+          className="flex gap-[50px] w-[520px] mt-[10px] p-[20px] rounded-[4px]"
+          style={{ backgroundColor: "rgba(38, 50, 56, 1)" }}
+        >
+          <div className="flex flex-col gap-[5px]">
             <img
-              src={`${baseApi}/images/${avatar}`}
+              src={
+                avatar && avatar.startsWith("https")
+                  ? avatar
+                  : `${baseApi}/images/${avatar}`
+              }
               alt=""
               width={150}
               height={200}
             />
-            <h3>
+            <h3 className="text-white">
               Tham gia:
               {d.getDate() +
                 "/" +
@@ -68,13 +79,14 @@ export default function User() {
                 d.getFullYear()}
             </h3>
           </div>
-          <form className="form-management-info" onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-[5px]" onSubmit={handleSubmit}>
             <label htmlFor="Username">Username:</label>
             <input type="text" value={username} readOnly />
             <label htmlFor="Email">Email:</label>
             <input type="email" value={email} readOnly />
             <label htmlFor="Password">Password:</label>
             <input
+              className="text-[14px]"
               type="text"
               ref={setPassword}
               placeholder="Bỏ trống nếu không muốn đổi"
@@ -82,10 +94,11 @@ export default function User() {
             {err && <strong className="error">{err}</strong>}
             <label htmlFor="Avatar">Avatar:</label>
             <input type="file" ref={linkFile} />
-            <button>Cập nhật</button>
+            <button className="btn-form">Cập nhật</button>
           </form>
         </div>
-      </section>
-    </>
+      </div>
+      <Footer />
+    </section>
   );
 }

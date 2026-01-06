@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { baseApi } from "./Register";
-import NavBar from "./NavBar";
-import "./FormManagement.css";
-export default function UpdateMovie() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+export default function UpdateMovie({ ref, id }) {
   const [movie, setMovie] = useState("");
-  const [isClicked, setIsClicked] = useState(false);
   const title = useRef();
   const description = useRef();
   const thumbnail = useRef();
@@ -18,6 +12,7 @@ export default function UpdateMovie() {
   const director = useRef();
   const poster = useRef();
   useEffect(() => {
+    if (!id) return;
     fetch(`${baseApi}/admin/movie/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -54,17 +49,22 @@ export default function UpdateMovie() {
       })
       .then(({ message }) => {
         console.log(message);
-        navigate("/admin");
+        ref.current.close();
       })
       .catch();
   };
   return (
     <>
-      <NavBar isClicked={isClicked} setIsClicked={setIsClicked} />
-      <section className="form-management-container">
-        <h2>Sửa thông tin phim</h2>
-        <div className="form-management">
-          <form className="form-management-info">
+      <dialog
+        ref={ref}
+        className="fixed w-[550px] top-[100px] start-[400px] px-[10px] py-[25px] rounded-[5px] bg-black "
+      >
+        <form
+          method="dialog"
+          className="flex justify-evenly w-[510px] m-auto"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-col">
             <label htmlFor="Title">Tiêu đề:</label>
             <input
               type="text"
@@ -88,6 +88,8 @@ export default function UpdateMovie() {
               name="thumbnail"
               ref={thumbnail}
             />
+          </div>
+          <div className="flex flex-col">
             <label htmlFor="VideoUrl">Link Video:</label>
             <input
               type="text"
@@ -96,8 +98,6 @@ export default function UpdateMovie() {
               defaultValue={movie.videoUrl}
               ref={videoUrl}
             />
-          </form>
-          <form className="form-management-info" onSubmit={handleSubmit}>
             <label htmlFor="Year">Năm:</label>
             <input
               type="number"
@@ -137,10 +137,10 @@ export default function UpdateMovie() {
             />
             <label htmlFor="Poster">Poster:</label>
             <input type="file" id="poster" name="poster" ref={poster} />
-            <button>Cập nhật</button>
-          </form>
-        </div>
-      </section>
+            <button className="btn-form">Cập nhật</button>
+          </div>
+        </form>
+      </dialog>
     </>
   );
 }

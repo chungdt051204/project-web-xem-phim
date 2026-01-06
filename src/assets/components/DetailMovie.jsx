@@ -1,36 +1,48 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useState, useContext, useRef } from "react";
 import AppContext from "./AppContext";
-import { baseApi } from "./Register";
 import ReactPlayer from "react-player";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { url } from "../../App";
 import Slider from "./Slider";
 import NavBar from "./NavBar";
-import "./DetailMovie.css";
-export default function DetailMovie({ data }) {
+import Dialog from "./Dialog";
+import Footer from "./Footer";
+import fetchApi from "../service/api";
+
+export default function DetailMovie() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const { isLogin } = useContext(AppContext);
+  const [movie, setMovie] = useState(null);
   const [moviesWithSameGenre, setMoviesWithSameGenre] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const dialog = useRef();
   //Tạo mảng có 10 phần tử
   const star = [...Array(10)].map((_, i) => i + 1);
   useEffect(() => {
-    //Nếu chưa có dữ liệu thì dừng luôn
-    if (!data) return;
-    fetch(
-      `${baseApi}/movies/${data._id}?genre=${encodeURIComponent(data.genre[0])}`
-    )
-      .then((res) => res.json())
-      .then((value) => {
-        setMoviesWithSameGenre(value);
-      });
-  }, [data]);
+    const params = new URLSearchParams();
+    if (id) params.append("id", id);
+    fetchApi({ url: `${url}/movie?${params.toString()}`, setData: setMovie });
+  }, [id]);
+  // useEffect(() => {
+  //   //Nếu chưa có dữ liệu thì dừng luôn
+  //   if (!data) return;
+  //   fetch(
+  //     `${url}/movies/${data._id}?genre=${encodeURIComponent(data.genre[0])}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((value) => {
+  //       setMoviesWithSameGenre(value);
+  //     });
+  // }, [data]);
   const handleClick = (movieId, poster, title, rating) => {
-    if (!isLogin) {
-      alert("Bạn chưa đăng nhập");
+    if (!isLogin && dialog) {
+      dialog.current.showModal();
       return;
     }
-    fetch(`${baseApi}/favorite-movies`, {
+    fetch(`${url}/favorite-movies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,8 +63,8 @@ export default function DetailMovie({ data }) {
         }
         throw res;
       })
-      .then(({ message }) => {
-        alert(message);
+      .then(() => {
+        dialog.current.showModal();
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -63,25 +75,32 @@ export default function DetailMovie({ data }) {
   return (
     <>
       <NavBar isClicked={isClicked} setIsClicked={setIsClicked} />
-      <section className="movie-detail">
-        <div className="movie-detail-wrapper">
-          {data && (
-            <div className="movie-detail-content">
+      <section
+        className="flex w-[1100px] h-[1000px] my-[50px] mx-auto rounded-[5px]
+       text-white bg-[rgb(15,20,22)]"
+      >
+        <div className="w-[1000px] my-[40px] mx-auto">
+          {movie != null && (
+            <div className="flex gap-[30px]">
               <img
-                src={`${baseApi}/images/${data.poster}`}
+                className="rounded-[4px] w-[200px] h-[300px]"
+                src={`${url}/images/${movie.poster}`}
                 alt=""
-                width={200}
-                height={300}
               />
-              <div className="movie-detail-info">
-                <h2>{data.title}</h2>
-                <p>{data.description}</p>
+              <div>
+                <h2
+                  className="text-[24px]"
+                  style={{ color: "rgba(181, 231, 69, 1)" }}
+                >
+                  {movie.title}
+                </h2>
+                <p>{movie.description}</p>
                 <hr />
-                <div className="movie-detail-stats">
-                  <div className="movie-detail-progress">
+                <div className="flex items-center gap-[10px] mt-[20px] mb-[10px] ">
+                  <div className="w-[50px] h-[50px]">
                     <CircularProgressbar
-                      value={data.rating * 10}
-                      text={`${data.rating * 10}%`}
+                      value={movie.rating * 10}
+                      text={`${movie.rating * 10}%`}
                       styles={buildStyles({
                         textSize: "24px",
                         textColor: "white",
@@ -90,59 +109,62 @@ export default function DetailMovie({ data }) {
                       })}
                     />
                   </div>
-                  <div className="movie-detail-rating-year">
-                    <div className="movie-detail-rating-year-star">
+                  <div className="flex flex-col">
+                    <div className="flex">
                       {star.map((value, index) => {
                         return (
                           <div key={index}>
                             <i
                               style={{
-                                color: index < data.rating - 1 && "yellow",
+                                color: index < movie.rating - 1 && "yellow",
                               }}
                               className="fa-solid fa-star"
                             ></i>
                           </div>
                         );
                       })}
-                      <div className="movie-detail-year">
+                      <div className="ms-[50px]">
                         <i className="fa-solid fa-calendar-days"></i>
-                        {data.year}
+                        {movie.year}
                       </div>
                     </div>
-                    <div>(Đánh giá: {data.rating}/10)</div>
+                    <div>(Đánh giá: {movie.rating}/10)</div>
                   </div>
                 </div>
-                <div className="movie-detail-genre">
+                <div className="flex gap-[7px]">
                   <div>Thể loại:</div>
-                  {data.genre.map((value, index) => {
+                  {movie?.genre.map((value) => {
                     return (
-                      <div key={index}>
+                      <div key={value._id}>
                         <Link
                           to={`/filter/genre?genre=${encodeURIComponent(
                             value
                           )}`}
                         >
-                          {value}
+                          <h4 style={{ color: "rgba(181, 231, 69, 1)" }}>
+                            {value.name}
+                          </h4>
                         </Link>
                       </div>
                     );
                   })}
                 </div>
-                <p>Thời lượng: {data.duration}</p>
-                <p>Đạo diễn: {data.director}</p>
+                <p>Thời lượng: {movie.duration}</p>
+                <p>Đạo diễn: {movie.director}</p>
               </div>
             </div>
           )}
           <button
+            className="btn-add my-[20px]"
             onClick={() =>
-              handleClick(data._id, data.poster, data.title, data.rating)
+              handleClick(movie._id, movie.poster, movie.title, movie.rating)
             }
           >
             Thêm vào danh sách yêu thích
           </button>
           <ReactPlayer
             style={{ margin: "auto" }}
-            src={data.videoUrl}
+            src={movie?.videoUrl}
             //Bật controls để hiển thị thanh thời lượng và setting
             controls
             width={1000}
@@ -155,6 +177,15 @@ export default function DetailMovie({ data }) {
           <Slider data={moviesWithSameGenre} content="Phim liên quan" />
         )}
       </div>
+      <Dialog
+        ref={dialog}
+        message={
+          !isLogin
+            ? "Vui lòng đăng nhập để sử dụng chức năng này"
+            : "Đã thêm phim vào danh sách yêu thích"
+        }
+      />
+      <Footer />
     </>
   );
 }

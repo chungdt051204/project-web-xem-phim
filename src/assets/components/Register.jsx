@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 export const baseApi = "http://localhost:3000";
-import "./Auth.css";
 export default function Register() {
   const navigate = useNavigate();
   const [usernameInvalid, setUsernameInvalid] = useState("");
@@ -70,7 +69,7 @@ export default function Register() {
       });
   };
   return (
-    <section className="auth">
+    <section className="form-auth-container">
       <div className="form-auth">
         <h2>Đăng ký</h2>
         <form className="form-register" onSubmit={handleSubmit}>

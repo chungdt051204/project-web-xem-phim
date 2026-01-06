@@ -1,20 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { baseApi } from "./Register";
-import "./Slider.css";
 export default function Slider({ data, content }) {
-  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [onMouse, setOnMouse] = useState(false);
   const [idx, setIdx] = useState(0);
   const slider = useRef();
-  // const handleClick = () => {
-  //   navigate(
-  //     `/movie?name=${encodeURIComponent(
-  //       data[Math.floor(Math.random() * data.length)].title
-  //     )}`
-  //   );
-  // };
   const handleClickLeft = () => {
     const maxScroll = slider.current.scrollWidth - slider.current.clientWidth;
     //maxScroll: giá trị cuộn tối đa
@@ -45,25 +36,35 @@ export default function Slider({ data, content }) {
     }
   };
   return (
-    <section className="slider-container">
-      {/* <button onClick={handleClick}>Xem phim ngẫu nhiên</button> */}
-      <h2>{content}</h2>
-      <div className="slider">
+    <section className="w-[1200px] mx-auto">
+      <h2 className="text-[28px]">{content}</h2>
+      <div
+        className="relative flex h-[350px] rounded-[5px]"
+        style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
+      >
         {slider.current &&
           slider.current.scrollWidth > slider.current.clientWidth && (
             <button
-              className="slider-button slider-button-left"
+              className="absolute w-[30px] h-[8%] top-[110px] left-[35px] text-white border-none bg-red-500 z-1"
               onClick={handleClickLeft}
             >
               <i className="fa-solid fa-angle-left"></i>
             </button>
           )}
-        <div className="slider-track" ref={slider}>
+        <div
+          className="flex gap-[10px] w-[1120px] my-[30px] mx-auto overflow-x-auto "
+          style={{ scrollBehavior: "smooth" }}
+          ref={slider}
+        >
           {data.map((value, index) => {
             return (
-              <div key={index} className="slider-item">
-                <Link className="link" to={`/movie/${value._id}`}>
+              <div
+                key={index}
+                className="relative flex flex-col flex-shrink-0 gap-[15px] w-[150px] "
+              >
+                <Link className="link" to={`/movie/detail?id=${value._id}`}>
                   <img
+                    className="w-[150px] h-[200px] rounded-[3px]"
                     onMouseEnter={() => {
                       setIdx(index);
                       setOnMouse(true);
@@ -71,9 +72,6 @@ export default function Slider({ data, content }) {
                     onMouseLeave={() => setOnMouse(false)}
                     style={{ opacity: onMouse && index === idx && "0.4" }}
                     src={`${baseApi}/images/${value.poster}`}
-                    alt=""
-                    width={150}
-                    height={200}
                   />
                 </Link>
                 <Link
@@ -84,7 +82,7 @@ export default function Slider({ data, content }) {
                   onMouseLeave={() => {
                     setOnMouse(false);
                   }}
-                  to={`/movie/${value._id}`}
+                  to={`/movie/detail?id=${value._id}`}
                 >
                   <h4>{value.title}</h4>
                 </Link>
@@ -110,7 +108,7 @@ export default function Slider({ data, content }) {
         {slider.current &&
           slider.current.scrollWidth > slider.current.clientWidth && (
             <button
-              className="slider-button slider-button-right"
+              className="absolute w-[30px] h-[8%] top-[110px] left-[1125px] text-white border-none bg-red-500 z-1"
               onClick={handleClickRight}
             >
               <i className="fa-solid fa-angle-right"></i>

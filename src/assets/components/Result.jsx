@@ -1,21 +1,27 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { baseApi } from "./Register";
-import "./Result.css";
 export default function Result({ data, content, buttons }) {
   const [onMouse, setOnMouse] = useState(false);
   const [idx, setIdx] = useState(0);
   return (
-    <section className="result-container">
-      <h2>{content}</h2>
-      <div className="result">
-        <div className="result-track">
+    <section className="flex flex-col gap-[10px] w-[800px] mt-[10px] ms-[40px] ">
+      <h2 className="text-[28px]">{content}</h2>
+      <div
+        className="flex flex-col gap-[30px] py-[30px] px-0 rounded-[5px]"
+        style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
+      >
+        <div className="flex flex-wrap gap-[20px] w-[680px] mx-auto">
           {data.length > 0 ? (
             data.map((value, index) => {
               return (
-                <div key={index} className="result-item">
+                <div
+                  key={index}
+                  className="relative flex flex-col gap-[10px] w-[150px] h-[300px]"
+                >
                   <Link to={`/movie/${value._id}`}>
                     <img
+                      className="w-[150px] h-[200px] rounded-[3px]"
                       onMouseEnter={() => {
                         setIdx(index);
                         setOnMouse(true);
@@ -24,8 +30,6 @@ export default function Result({ data, content, buttons }) {
                       style={{ opacity: onMouse && index === idx && "0.4" }}
                       src={`${baseApi}/images/${value.poster}`}
                       alt=""
-                      width={150}
-                      height={200}
                     />
                   </Link>
                   <Link

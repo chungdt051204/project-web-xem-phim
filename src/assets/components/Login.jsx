@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState, useContext } from "react";
 import AppContext from "./AppContext";
 import { baseApi } from "./Register";
-import "./Auth.css";
+import LoginGoogle from "./LoginGoogle";
 export default function Login() {
   const navigate = useNavigate();
   const { setIsLogin, setIsAdmin, setAvatar } = useContext(AppContext);
@@ -53,7 +53,7 @@ export default function Login() {
       });
   };
   return (
-    <section className="auth">
+    <section className="form-auth-container">
       <div className="form-auth">
         <h2>Đăng nhập</h2>
         <form onSubmit={handleSubmit}>
@@ -91,6 +91,7 @@ export default function Login() {
           )}
           <button className="btn-form">Đăng nhập</button>
         </form>
+        <LoginGoogle />
         <p>
           Chưa có tài khoản?
           <strong>

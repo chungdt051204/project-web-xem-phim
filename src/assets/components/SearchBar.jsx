@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { baseApi } from "./Register";
-import "./SearchBar.css";
+
 export default function SearchBar({ isClicked, setIsClicked }) {
   const navigate = useNavigate();
   const [value, setValue] = useState("");
@@ -23,7 +23,7 @@ export default function SearchBar({ isClicked, setIsClicked }) {
   };
   return (
     <section>
-      <form className="form-search" onSubmit={handleSubmit}>
+      <form className="relative text-black" onSubmit={handleSubmit}>
         <input
           onChange={handleChange}
           type="text"
@@ -33,26 +33,33 @@ export default function SearchBar({ isClicked, setIsClicked }) {
           placeholder="Nhập tên phim"
           required
         />
-        <button>
+        <button className="absolute start-[180px] top-[2px] text-black border-0 bg-transparent">
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </form>
       {value && (
-        <div className="searchBar-dropdown-menu">
+        <div
+          className="absolute flex flex-col overflow-auto w-[210px] h-[300px] pt-[5px] 
+          pb-[30px] px-[10px] text-white rounded-[5px]"
+          style={{
+            scrollBehavior: "smooth",
+            backgroundColor: "rgb(30, 30, 30)",
+          }}
+        >
           {moviesSuggestion.length > 0 ? (
             moviesSuggestion.map((value, index) => {
               return (
-                <div className="searchBar-dropdown-menu-item" key={index}>
+                <div
+                  className="flex w-[180px] gap-x-[20px] mt-[10px]"
+                  key={index}
+                >
+                  <div className="w-[70px] h-[100px] flex-shrink-0">
+                    <Link to={`/movie/${value._id}`}>
+                      <img src={`${baseApi}/images/${value.poster}`} alt="" />
+                    </Link>
+                  </div>
                   <Link to={`/movie/${value._id}`}>
-                    <img
-                      src={`${baseApi}/images/${value.poster}`}
-                      alt=""
-                      width={70}
-                      height={100}
-                    />
-                  </Link>
-                  <Link to={`/movie/${value._id}`}>
-                    <strong>{value.title}</strong>
+                    <p className="text-[14px]">{value.title}</p>
                   </Link>
                 </div>
               );

@@ -1,27 +1,27 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import "./Pagination.css";
+
 export default function Pagination() {
-  //Tạo mảng có 2 phần tử
-  const pages = [...Array(2)].map((_, i) => i + 1);
+  //Tạo mảng có 3 phần tử
+  const pages = [...Array(3)].map((_, i) => i + 1);
   const [currentPage, setCurrentPage] = useState(0);
   return (
     <>
-      <section className="pagination">
-        <button>
+      <section className="flex gap-[5px] mx-auto">
+        <button className="btn-pagination" disabled>
           Trang {currentPage + 1} của {pages.length}
         </button>
         {currentPage >= 1 && (
           <Link to="/">
             <button
-              className="pagination-button"
+              className="btn btn-pagination"
               onClick={() => setCurrentPage(0)}
             >
               Trang đầu
             </button>
           </Link>
         )}
-        <div className="pagination-item">
+        <div className="flex gap-[5px]">
           {pages.map((value, index) => {
             return (
               <Link
@@ -29,7 +29,7 @@ export default function Pagination() {
                 to={index > 0 ? `/movies-page${index + 1}` : "/"}
               >
                 <button
-                  className="pagination-button"
+                  className="btn btn-pagination"
                   onClick={() => {
                     setCurrentPage(index);
                   }}
@@ -45,7 +45,7 @@ export default function Pagination() {
         </div>
         <Link to={`/movies-page${pages.length}`}>
           <button
-            className="pagination-button"
+            className="btn btn-pagination"
             onClick={() => setCurrentPage(pages.length - 1)}
           >
             Trang cuối
