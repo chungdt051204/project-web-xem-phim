@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import AppContext from "./AppContext";
-import { baseApi } from "./Register";
 import Dialog from "./Dialog";
+import fetchApi from "../service/api";
+import { url } from "../../App";
 export default function RandomMovie() {
   const { movies, isLogin } = useContext(AppContext);
-  const [randomMovie, setRandomMovie] = useState("");
+  const [randomMovie, setRandomMovie] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [onMouse, setOnMouse] = useState(false);
   const dialog = useRef();
@@ -14,24 +15,21 @@ export default function RandomMovie() {
     if (!isLogin) {
       dialog.current.showModal();
       return;
-    }
-    fetch(
-      `${baseApi}/movie?name=${encodeURIComponent(
-        movies[Math.floor(Math.random() * movies.length)].title
-      )}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setRandomMovie(data);
-        console.log(data);
+    } else {
+      fetchApi({
+        url: `${url}/movie?id=${
+          movies[Math.floor(Math.random() * movies.length)]._id
+        }`,
+        setData: setRandomMovie,
       });
+    }
   };
   return (
     <section className="mt-[60px]">
       <button className="btn-random ms-[75px]" onClick={handleClick}>
         Xem phim ngẫu nhiên
       </button>
-      {clicked && randomMovie && (
+      {clicked && randomMovie !== null && (
         <div
           className="w-[250px] h-[320px] mt-[10px] py-[20px] px-[30px] rounded-[3px]"
           style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
@@ -42,7 +40,7 @@ export default function RandomMovie() {
               onMouseLeave={() => setOnMouse(false)}
               className="w-[150px] h-[200px] rounded-[3px]"
               style={{ opacity: onMouse && 0.5 }}
-              src={`${baseApi}/images/${randomMovie.poster}`}
+              src={`${url}/images/${randomMovie.poster}`}
               alt=""
             />
             <Link

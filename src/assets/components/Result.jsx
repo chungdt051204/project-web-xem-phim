@@ -19,7 +19,7 @@ export default function Result({ data, content, buttons }) {
                   key={index}
                   className="relative flex flex-col gap-[10px] w-[150px] h-[300px]"
                 >
-                  <Link to={`/movie/${value._id}`}>
+                  <Link to={`/movie/detail?id=${value._id}`}>
                     <img
                       className="w-[150px] h-[200px] rounded-[3px]"
                       onMouseEnter={() => {
@@ -41,7 +41,7 @@ export default function Result({ data, content, buttons }) {
                       setOnMouse(false);
                     }}
                     className="link"
-                    to={`/movie/${value._id}`}
+                    to={`/movie/detail?id=${value._id}`}
                   >
                     <h4>{value.title}</h4>
                   </Link>
@@ -50,7 +50,7 @@ export default function Result({ data, content, buttons }) {
                     {value.rating}
                   </div>
                   {onMouse && index === idx && (
-                    <Link to={`/movie/${value._id}`}>
+                    <Link to={`/movie/detail?id=${value._id}`}>
                       <button
                         className="play"
                         onMouseEnter={() => setOnMouse(true)}

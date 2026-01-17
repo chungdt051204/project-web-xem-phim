@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { baseApi } from "./Register";
+import fetchApi from "../service/api";
+import { url } from "../../App";
 
 export default function SearchBar({ isClicked, setIsClicked }) {
   const navigate = useNavigate();
@@ -15,11 +17,10 @@ export default function SearchBar({ isClicked, setIsClicked }) {
   const handleChange = () => {
     setValue(valueInput.current.value);
     //Khi dữ liệu trên thanh input thay đổi sẽ gọi hàm fetch để lấy dữu liệu từ backend
-    fetch(`${baseApi}/movies-suggestion?value=${encodeURIComponent(value)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMoviesSuggestion(data);
-      });
+    fetchApi({
+      url: `${url}/movie?name=${encodeURIComponent(value)}`,
+      setData: setMoviesSuggestion,
+    });
   };
   return (
     <section>
@@ -54,11 +55,11 @@ export default function SearchBar({ isClicked, setIsClicked }) {
                   key={index}
                 >
                   <div className="w-[70px] h-[100px] flex-shrink-0">
-                    <Link to={`/movie/${value._id}`}>
+                    <Link to={`/movie/detail?id=${value._id}`}>
                       <img src={`${baseApi}/images/${value.poster}`} alt="" />
                     </Link>
                   </div>
-                  <Link to={`/movie/${value._id}`}>
+                  <Link to={`/movie/detail?id=${value._id}`}>
                     <p className="text-[14px]">{value.title}</p>
                   </Link>
                 </div>

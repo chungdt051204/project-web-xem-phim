@@ -12,7 +12,7 @@ import Footer from "./Footer";
 import fetchApi from "../service/api";
 
 export default function DetailMovie() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { isLogin } = useContext(AppContext);
   const [movie, setMovie] = useState(null);
@@ -26,17 +26,6 @@ export default function DetailMovie() {
     if (id) params.append("id", id);
     fetchApi({ url: `${url}/movie?${params.toString()}`, setData: setMovie });
   }, [id]);
-  // useEffect(() => {
-  //   //Nếu chưa có dữ liệu thì dừng luôn
-  //   if (!data) return;
-  //   fetch(
-  //     `${url}/movies/${data._id}?genre=${encodeURIComponent(data.genre[0])}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((value) => {
-  //       setMoviesWithSameGenre(value);
-  //     });
-  // }, [data]);
   const handleClick = (movieId, poster, title, rating) => {
     if (!isLogin && dialog) {
       dialog.current.showModal();
@@ -137,9 +126,7 @@ export default function DetailMovie() {
                     return (
                       <div key={value._id}>
                         <Link
-                          to={`/filter/genre?genre=${encodeURIComponent(
-                            value
-                          )}`}
+                          to={`/filter?genre=${encodeURIComponent(value.name)}`}
                         >
                           <h4 style={{ color: "rgba(181, 231, 69, 1)" }}>
                             {value.name}

@@ -6,28 +6,29 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 
 export default function User() {
-  const { username, email, password, avatar, createdAt } =
-    useContext(AppContext);
+  const { me } = useContext(AppContext);
   const setPassword = useRef();
   const linkFile = useRef();
   const [isClicked, setIsClicked] = useState(false);
   const [err, setErr] = useState("");
   const navigate = useNavigate();
-  const d = new Date(createdAt);
+  const d = new Date(me?.createdAt);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (setPassword.current.value && setPassword.current.value.length < 8) {
       setErr("Mật khẩu mới phải có ít nhất 8 ký tự");
       return;
     }
-    if (setPassword.current.value === password) {
+    if (setPassword.current.value === me?.password) {
       setErr("Mật khẩu mới không được trùng với mật khẩu cũ");
       return;
     }
     const formData = new FormData();
     formData.append(
       "password",
-      setPassword.current.value === "" ? password : setPassword.current.value
+      setPassword.current.value === ""
+        ? me?.password
+        : setPassword.current.value
     );
     formData.append("file", linkFile.current.files[0]);
     fetch(`${baseApi}/update/user`, {
@@ -62,11 +63,12 @@ export default function User() {
           <div className="flex flex-col gap-[5px]">
             <img
               src={
-                avatar && avatar.startsWith("https")
-                  ? avatar
-                  : `${baseApi}/images/${avatar}`
+                me?.avatar?.includes("https")
+                  ? me?.avatar
+                  : `${baseApi}/images/${me?.avatar}`
               }
               alt=""
+              referrerPolicy="no-referrer"
               width={150}
               height={200}
             />
@@ -81,9 +83,9 @@ export default function User() {
           </div>
           <form className="flex flex-col gap-[5px]" onSubmit={handleSubmit}>
             <label htmlFor="Username">Username:</label>
-            <input type="text" value={username} readOnly />
+            <input type="text" value={me?.name} readOnly />
             <label htmlFor="Email">Email:</label>
-            <input type="email" value={email} readOnly />
+            <input type="email" value={me?.email} readOnly />
             <label htmlFor="Password">Password:</label>
             <input
               className="text-[14px]"

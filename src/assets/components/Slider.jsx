@@ -91,7 +91,7 @@ export default function Slider({ data, content }) {
                   {value.rating}
                 </div>
                 {onMouse && index === idx && (
-                  <Link to={`/movie/${value._id}`}>
+                  <Link to={`/movie/detail?id=${value._id}`}>
                     <button
                       className="play"
                       onMouseEnter={() => setOnMouse(true)}

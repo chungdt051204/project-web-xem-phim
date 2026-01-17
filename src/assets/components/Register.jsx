@@ -58,7 +58,7 @@ export default function Register() {
       })
       .then(({ message }) => {
         console.log(message);
-        navigate("/");
+        navigate("/login");
       })
       .catch(async (err) => {
         if (err.status === 400) {

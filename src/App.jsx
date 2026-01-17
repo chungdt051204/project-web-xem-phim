@@ -8,12 +8,7 @@ import Home from "./assets/components/Home";
 import ListMovies from "./assets/components/ListMovies";
 import Result from "./assets/components/Result";
 import Admin from "./assets/components/Admin";
-import DetailMovieWithId from "./assets/components/DetailMovieWithId";
-import DetailMovieWithName from "./assets/components/DetailMovieWithName";
-import FilterResultWithGenre from "./assets/components/FilterResultWithGenre";
-import FilterResultWithYear from "./assets/components/FilterResultWithYear";
 import User from "./assets/components/User";
-import SearchResult from "./assets/components/SearchResult";
 import Pagination from "./assets/components/Pagination";
 import FavoriteMovies from "./assets/components/FavoriteMovies";
 export const url = "http://localhost:3000";
@@ -25,20 +20,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const [isLogin, setIsLogin] = useState(false);
-  const [id, setId] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [avatar, setAvatar] = useState(null);
-  const [createdAt, setCreatedAt] = useState(Date.now);
+  const [me, setMe] = useState(null);
   const [categories, setCategories] = useState([]);
   const [movies, setMovies] = useState([]);
   const [moviesPage1, setMoviesPage1] = useState([]);
   const [moviesPage2, setMoviesPage2] = useState([]);
   const [moviePage3, setMoviePage3] = useState([]);
   useEffect(() => {
-    fetch(`${baseApi}/user`, {
+    fetch(`${baseApi}/me`, {
       credentials: "include",
     })
       .then((res) => {
@@ -47,20 +36,15 @@ function App() {
         }
         throw res;
       })
-      .then((data) => {
+      .then(({ result }) => {
+        console.log(result);
         setIsLogin(true);
-        setId(data._id);
-        setUsername(data.name);
-        setEmail(data.email);
-        setPassword(data.password);
-        setIsAdmin(data.isAdmin);
-        setAvatar(data.avatar);
-        setCreatedAt(data.createdAt);
+        setMe(result);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []); //useEffect chạy mỗi khi component mount
+  }, [refresh, isLoading]); //useEffect chạy mỗi khi component mount
   useEffect(() => {
     fetchApi({ url: `${url}/category`, setData: setCategories });
   }, [refresh, isLoading]);
@@ -94,16 +78,14 @@ function App() {
         value={{
           isLogin,
           setIsLogin,
-          id,
-          username,
-          email,
-          password,
-          isAdmin,
-          avatar,
-          setAvatar,
-          createdAt,
+          me,
+          setMe,
           categories,
           movies,
+          refresh,
+          setRefresh,
+          isLoading,
+          setIsLoading,
         }}
       >
         <Routes>
@@ -153,15 +135,14 @@ function App() {
             }
           />
           <Route
-            path="/search"
-            element={<Home content2={<SearchResult />} />}
-          />
-          <Route
             path="/filter"
             element={<Home content2={<MovieWithQueryString />} />}
           />
+          <Route
+            path="/search"
+            element={<Home content2={<MovieWithQueryString />} />}
+          />
           <Route path="/movie/detail" element={<DetailMovie />} />
-          <Route path="/movie" element={<DetailMovieWithName />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />

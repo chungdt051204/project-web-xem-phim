@@ -5,7 +5,7 @@ import { baseApi } from "./Register";
 import SearchBar from "./SearchBar";
 export default function NavBar({ isClicked, setIsClicked }) {
   const navigate = useNavigate();
-  const { isLogin, setIsLogin, isAdmin, avatar, categories, movies } =
+  const { isLogin, setIsLogin, me, categories, movies } =
     useContext(AppContext);
   const [onMouseGenre, setOnMouseGenre] = useState(false);
   const [onMouseYear, setOnMouseYear] = useState(false);
@@ -16,7 +16,7 @@ export default function NavBar({ isClicked, setIsClicked }) {
         return value.year;
       })
     ),
-  ]; //Phương thức Set tạo mảng mới không có giá trị trùng
+  ];
   //Chức năng đăng xuất
   const handleClick = () => {
     setIsLogin(false);
@@ -35,6 +35,7 @@ export default function NavBar({ isClicked, setIsClicked }) {
       })
       .then(({ message }) => {
         console.log(message);
+        navigate("/");
       })
       .catch();
   };
@@ -121,11 +122,12 @@ export default function NavBar({ isClicked, setIsClicked }) {
                   <img
                     className="w-[50px] h-[50px] border-2 border-blue-500 rounded-[50%]"
                     src={
-                      avatar && avatar.includes("https")
-                        ? avatar
-                        : `${baseApi}/images/${avatar}`
+                      me?.avatar?.includes("https")
+                        ? me?.avatar
+                        : `${baseApi}/images/${me?.avatar}`
                     }
                     alt=""
+                    referrerPolicy="no-referrer"
                     onClick={() => setClicked((prev) => !prev)}
                   />
                   {clicked ? (
@@ -146,7 +148,7 @@ export default function NavBar({ isClicked, setIsClicked }) {
                  p-[20px] end-[75px] rounded-[5px]"
                 style={{ backgroundColor: "rgb(30, 30, 30)" }}
               >
-                {isAdmin && (
+                {me.isAdmin && (
                   <Link className="user-dropdown-link" to="/admin">
                     <i className="fa-solid fa-unlock"></i>
                     <strong>Trang quản lý</strong>

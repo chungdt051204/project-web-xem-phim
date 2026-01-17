@@ -42,7 +42,7 @@ export default function Carousel() {
           if (value.isFeatured) {
             return (
               <div className="flex-shrink-0" key={value._id}>
-                <Link to={`/movie/${value._id}`}>
+                <Link to={`/movie/detail?id=${value._id}`}>
                   <img
                     className="w-[1000px] h-[500px] rounded-[5px]"
                     src={`${url}/images/${value.thumbnail}`}

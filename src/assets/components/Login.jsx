@@ -5,7 +5,7 @@ import { baseApi } from "./Register";
 import LoginGoogle from "./LoginGoogle";
 export default function Login() {
   const navigate = useNavigate();
-  const { setIsLogin, setIsAdmin, setAvatar } = useContext(AppContext);
+  const { setIsLogin, setMe } = useContext(AppContext);
   const [usernameInvalid, setUsernameInvalid] = useState("");
   const [passwordInvalid, setPasswordInvalid] = useState("");
   const [loginInvalid, setLoginInvalid] = useState("");
@@ -43,8 +43,7 @@ export default function Login() {
         console.log(data);
         navigate("/");
         setIsLogin(true);
-        setIsAdmin(data.isAdmin);
-        setAvatar(data.avatar);
+        setMe(data);
       })
       .catch((err) => {
         if (err.status === 401) {
