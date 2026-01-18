@@ -1,70 +1,79 @@
-import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { date, z } from "zod";
+import { useState } from "react";
 export const baseApi = "http://localhost:3000";
+//Tạo schema bằng Zod
+const registerSchema = z
+  .object({
+    fullName: z.string().trim().min(1, "Vui lòng nhập họ tên"),
+    username: z
+      .string()
+      .trim()
+      .min(5, "Tên đăng nhập phải có tối thiểu 5 ký tự"),
+    email: z.string().trim().email("Email không đúng định dạng"),
+    password: z.string().min(8, "Mật khẩu phải có tối thiểu 8 ký tự"),
+    verifyPassword: z.string().min(1, "Vui lòng nhập lại mật khẩu"),
+    phone: z
+      .string()
+      .regex(
+        /^(0)\d{9}$/,
+        "Số điện thoại phải có 10 chữ số và bắt đầu bằng số 0"
+      ),
+    dateOfBirth: z.coerce.date(),
+    gender: z.enum(["Nam", "Nữ"]),
+    avatar: z.any().refine((files) => files?.length > 0, "Vui lòng chọn file"),
+  })
+  .refine((data) => data.password === data.verifyPassword, {
+    message: "Mật khẩu không khớp",
+    path: ["verifyPassword"], //Báo lỗi tại vị trí của verifyPassword
+  });
 export default function Register() {
   const navigate = useNavigate();
-  const [usernameInvalid, setUsernameInvalid] = useState("");
-  const [emailInvalid, setEmailInvalid] = useState("");
-  const [passwordInvalid, setPasswordInvalid] = useState("");
-  const [verifyPasswordInvalid, setVerifyPasswordInvalid] = useState("");
-  const [avatarInvalid, setAvatarInvalid] = useState("");
-  const [registerInvalid, setRegisterInvalid] = useState("");
-  const nameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const verifyPasswordRef = useRef();
-  const linkFile = useRef();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (nameRef.current.value.trim().length < 5) {
-      setUsernameInvalid("Tên đăng nhập phải có tối thiểu 5 ký tự ");
-      //Dừng lại luôn không chạy lệnh fetch
-      return;
-    }
-    if (emailRef.current.value === "") {
-      setEmailInvalid("Email không được bỏ trống");
-      return;
-    }
-    if (passwordRef.current.value.length < 8) {
-      setPasswordInvalid("Mật khẩu phải có tối thiểu 8 ký tự");
-      return;
-    }
-    if (verifyPasswordRef.current.value === "") {
-      setVerifyPasswordInvalid("Vui lòng xác nhận mật khẩu");
-      return;
-    }
-    if (verifyPasswordRef.current.value !== passwordRef.current.value) {
-      setVerifyPasswordInvalid("Mật khẩu không khớp");
-      return;
-    }
-    if (!linkFile.current.files[0]) {
-      setAvatarInvalid("Vui lòng chọn tệp ");
-      return;
-    }
+  const [error, setError] = useState("");
+  //Kết nối React Hook Form với Zod
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      fullName: "",
+      username: "",
+      email: "",
+      password: "",
+      verifyPassword: "",
+      phone: "",
+    },
+  });
+  const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("name", nameRef.current.value);
-    formData.append("email", emailRef.current.value);
-    formData.append("password", passwordRef.current.value);
-    formData.append("file", linkFile.current.files[0]);
+    formData.append("fullName", data.fullName);
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("phone", data.phone);
+    formData.append("dateOfBirth", new Date(data.dateOfBirth).toISOString());
+    formData.append("gender", data.gender);
+    formData.append("avatar", data.avatar[0]);
     fetch(`${baseApi}/register`, {
       method: "POST",
       body: formData,
     })
       .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.json();
+        if (res.ok) return res.json();
+        throw res;
       })
       .then(({ message }) => {
-        console.log(message);
+        alert(message);
         navigate("/login");
       })
       .catch(async (err) => {
         if (err.status === 400) {
-          //Lấy message gửi từ phía backend
           const { message } = await err.json();
-          setRegisterInvalid(message);
+          setError(message);
         }
       });
   };
@@ -72,71 +81,77 @@ export default function Register() {
     <section className="form-auth-container">
       <div className="form-auth">
         <h2>Đăng ký</h2>
-        <form className="form-register" onSubmit={handleSubmit}>
+        <form className="form-register" onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="fullName">Họ tên:</label>
+          <input
+            {...register("fullName")}
+            type="text"
+            placeholder="Fullname"
+            autoComplete="off"
+          />
+          <strong className="error">{errors?.fullName?.message}</strong>
           <label htmlFor="username">Tên đăng nhập:</label>
           <input
+            {...register("username")}
             type="text"
-            id="name"
-            name="name"
-            ref={nameRef}
-            onChange={() => setUsernameInvalid("")}
             placeholder="Username"
             autoComplete="off"
           />
-          {usernameInvalid && (
-            <strong className="error">{usernameInvalid}</strong>
-          )}
+          <strong className="error">{errors?.username?.message}</strong>
           <label htmlFor="email">Email:</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            ref={emailRef}
-            onChange={() => setEmailInvalid("")}
+            {...register("email")}
+            type="text"
             placeholder="Email"
             autoComplete="off"
           />
-          {emailInvalid && <strong className="error">{emailInvalid}</strong>}
+          <strong className="error">{errors?.email?.message}</strong>
+          <strong className="error">{error && error}</strong>
           <label htmlFor="password">Mật khẩu:</label>
           <input
+            {...register("password")}
             type="password"
-            id="password"
-            name="password"
-            ref={passwordRef}
-            onChange={() => setPasswordInvalid("")}
             placeholder="Password"
             autoComplete="new-password"
           />
-          {passwordInvalid && (
-            <strong className="error">{passwordInvalid}</strong>
-          )}
+          <strong className="error">{errors?.password?.message}</strong>
           <label htmlFor="verifyPassword">Nhập lại mật khẩu:</label>
           <input
+            {...register("verifyPassword")}
             type="password"
-            id="verify-password"
-            name="verify-password"
-            ref={verifyPasswordRef}
-            onChange={() => setVerifyPasswordInvalid("")}
             autoComplete="new-password"
           />
-          {verifyPasswordInvalid && (
-            <strong className="error">{verifyPasswordInvalid}</strong>
-          )}
+          <strong className="error">{errors?.verifyPassword?.message}</strong>
+          <label htmlFor="phone">Số điện thoại:</label>
+          <input
+            {...register("phone")}
+            type="text"
+            placeholder="Phone"
+            autoComplete="new-password"
+          />
+          <strong className="error">{errors?.phone?.message}</strong>
+          <label htmlFor="dateOfBirth">Ngày sinh:</label>
+          <input {...register("dateOfBirth")} type="date" />
+          <strong className="error">{errors?.dateOfBirth?.message}</strong>
+          <label htmlFor="phone">Giới tính:</label>
+          <div className="flex gap-2">
+            <div className="flex gap-1 text-white">
+              <input {...register("gender")} type="radio" value="Nam" />
+              Nam
+            </div>
+            <div className="flex gap-1 text-white">
+              <input {...register("gender")} type="radio" value="Nữ" />
+              Nữ
+            </div>
+          </div>
+          <strong className="error">{errors?.gender?.message}</strong>
           <label htmlFor="avatar">Avatar:</label>
           <input
+            {...register("avatar")}
             type="file"
-            id="avatar"
-            name="avatar"
-            ref={linkFile}
-            onChange={() => setAvatarInvalid("")}
+            accept=".png, .jpg, .jpeg"
           />
-          {avatarInvalid ? (
-            <strong className="error">{avatarInvalid}</strong>
-          ) : (
-            registerInvalid && (
-              <strong className="error">{registerInvalid}</strong>
-            )
-          )}
+          <strong className="error">{errors?.avatar?.message}</strong>
           <button className="btn-form">Đăng ký</button>
         </form>
       </div>

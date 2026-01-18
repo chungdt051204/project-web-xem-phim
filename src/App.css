@@ -8,7 +8,7 @@
   display: none;
 }
 .form-auth-container {
-  @apply h-[100vh] bg-cover;
+  @apply h-[900px] bg-cover;
   background-image: url(./assets/background.jpg);
 }
 .form-auth-container > .form-auth {
@@ -34,9 +34,8 @@ form label {
   @apply text-white;
 }
 form input[type="text"],
-form input[type="email"],
 form input[type="password"],
-form input[type="number"] {
+form input[type="date"] {
   @apply w-[210px] h-[25px] p-[6px] bg-white rounded-[5px];
 }
 form input[type="file"] {
