@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { date, z } from "zod";
+import { z } from "zod";
 import { useState } from "react";
 export const baseApi = "http://localhost:3000";
 //Tạo schema bằng Zod
@@ -31,7 +31,7 @@ const registerSchema = z
   });
 export default function Register() {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [err, setErr] = useState({ username: "", email: "" });
   //Kết nối React Hook Form với Zod
   const {
     register,
@@ -70,10 +70,10 @@ export default function Register() {
         alert(message);
         navigate("/login");
       })
-      .catch(async (err) => {
-        if (err.status === 400) {
-          const { message } = await err.json();
-          setError(message);
+      .catch(async (error) => {
+        if (error.status === 409) {
+          const { message } = await error.json();
+          setErr(message);
         }
       });
   };
@@ -94,19 +94,26 @@ export default function Register() {
           <input
             {...register("username")}
             type="text"
+            onChange={() => {
+              setErr((prev) => ({ ...prev, username: "" }));
+            }}
             placeholder="Username"
             autoComplete="off"
           />
           <strong className="error">{errors?.username?.message}</strong>
+          <strong className="error">{err?.username}</strong>
           <label htmlFor="email">Email:</label>
           <input
             {...register("email")}
             type="text"
+            onChange={() => {
+              setErr((prev) => ({ ...prev, email: "" }));
+            }}
             placeholder="Email"
             autoComplete="off"
           />
           <strong className="error">{errors?.email?.message}</strong>
-          <strong className="error">{error && error}</strong>
+          <strong className="error">{err?.email}</strong>
           <label htmlFor="password">Mật khẩu:</label>
           <input
             {...register("password")}

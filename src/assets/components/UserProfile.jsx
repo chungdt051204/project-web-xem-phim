@@ -5,33 +5,39 @@ import { baseApi } from "./Register";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 
-export default function User() {
+export default function UserProfile() {
   const { me } = useContext(AppContext);
-  const setPassword = useRef();
-  const linkFile = useRef();
+  const fullName = useRef();
+  const password = useRef();
+  const avatar = useRef();
   const [isClicked, setIsClicked] = useState(false);
   const [err, setErr] = useState("");
   const navigate = useNavigate();
   const d = new Date(me?.createdAt);
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (setPassword.current.value && setPassword.current.value.length < 8) {
+    if (password.current?.value && password.current.value.length < 8) {
       setErr("Mật khẩu mới phải có ít nhất 8 ký tự");
       return;
     }
-    if (setPassword.current.value === me?.password) {
+    if (password.current?.value === me.password) {
       setErr("Mật khẩu mới không được trùng với mật khẩu cũ");
       return;
     }
     const formData = new FormData();
     formData.append(
-      "password",
-      setPassword.current.value === ""
-        ? me?.password
-        : setPassword.current.value
+      "fullName",
+      fullName.current?.value ? fullName.current.value : me?.fullName
     );
-    formData.append("file", linkFile.current.files[0]);
-    fetch(`${baseApi}/update/user`, {
+    formData.append(
+      "password",
+      password.current?.value === "" ? me?.password : password.current?.value
+    );
+    formData.append(
+      "avatar",
+      avatar.current.files[0] ? avatar.current.files[0] : me?.avatar
+    );
+    fetch(`${baseApi}/update`, {
       method: "PUT",
       credentials: "include",
       body: formData,
@@ -64,8 +70,8 @@ export default function User() {
             <img
               src={
                 me?.avatar?.includes("https")
-                  ? me?.avatar
-                  : `${baseApi}/images/${me?.avatar}`
+                  ? me.avatar
+                  : `${baseApi}/images/${me.avatar}`
               }
               alt=""
               referrerPolicy="no-referrer"
@@ -82,20 +88,22 @@ export default function User() {
             </h3>
           </div>
           <form className="flex flex-col gap-[5px]" onSubmit={handleSubmit}>
-            <label htmlFor="Username">Username:</label>
-            <input type="text" value={me?.name} readOnly />
+            <label htmlFor="Username">Họ tên:</label>
+            <input type="text" ref={fullName} defaultValue={me?.fullName} />
+            <label htmlFor="Username">Tên đăng nhập:</label>
+            <input type="text" value={me?.username} disabled={true} />
             <label htmlFor="Email">Email:</label>
-            <input type="email" value={me?.email} readOnly />
-            <label htmlFor="Password">Password:</label>
+            <input type="text" value={me?.email} disabled={true} />
+            <label htmlFor="Password">Mật khẩu:</label>
             <input
               className="text-[14px]"
-              type="text"
-              ref={setPassword}
+              type="password"
+              ref={password}
               placeholder="Bỏ trống nếu không muốn đổi"
             />
             {err && <strong className="error">{err}</strong>}
-            <label htmlFor="Avatar">Avatar:</label>
-            <input type="file" ref={linkFile} />
+            <label htmlFor="Avatar">Ảnh đại diện:</label>
+            <input type="file" ref={avatar} />
             <button className="btn-form">Cập nhật</button>
           </form>
         </div>

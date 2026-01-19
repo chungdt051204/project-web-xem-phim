@@ -39,15 +39,16 @@ export default function Login() {
         }
         throw res;
       })
-      .then((data) => {
-        console.log(data);
-        navigate("/");
+      .then(({ message, result }) => {
         setIsLogin(true);
-        setMe(data);
+        setMe(result);
+        alert(message);
+        navigate("/");
       })
-      .catch((err) => {
+      .catch(async (err) => {
         if (err.status === 401) {
-          return setLoginInvalid("Sai thông tin đăng nhập");
+          const { message } = await err.json();
+          setLoginInvalid(message);
         }
       });
   };

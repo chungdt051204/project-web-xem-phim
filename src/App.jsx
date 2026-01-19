@@ -8,7 +8,7 @@ import Home from "./assets/components/Home";
 import ListMovies from "./assets/components/ListMovies";
 import Result from "./assets/components/Result";
 import Admin from "./assets/components/Admin";
-import User from "./assets/components/User";
+import UserProfile from "./assets/components/UserProfile";
 import Pagination from "./assets/components/Pagination";
 import FavoriteMovies from "./assets/components/FavoriteMovies";
 export const url = "http://localhost:3000";
@@ -146,7 +146,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/user/info" element={<User />} />
+          <Route path="/user/info" element={<UserProfile />} />
           <Route path="/user/favorite-movies" element={<FavoriteMovies />} />
         </Routes>
       </AppContext.Provider>
