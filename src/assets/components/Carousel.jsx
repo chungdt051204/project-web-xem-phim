@@ -45,7 +45,7 @@ export default function Carousel() {
                 <Link to={`/movie/detail?id=${value._id}`}>
                   <img
                     className="w-[1000px] h-[500px] rounded-[5px]"
-                    src={`${url}/images/${value.thumbnail}`}
+                    src={value.thumbnail}
                   />
                 </Link>
               </div>

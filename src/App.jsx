@@ -23,6 +23,7 @@ function App() {
   const [me, setMe] = useState(null);
   const [categories, setCategories] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [moviesPage1, setMoviesPage1] = useState([]);
   const [moviesPage2, setMoviesPage2] = useState([]);
   const [moviePage3, setMoviePage3] = useState([]);
@@ -37,7 +38,6 @@ function App() {
         throw res;
       })
       .then(({ result }) => {
-        console.log(result);
         setIsLogin(true);
         setMe(result);
       })
@@ -50,6 +50,9 @@ function App() {
   }, [refresh, isLoading]);
   useEffect(() => {
     fetchApi({ url: `${url}/movie`, setData: setMovies });
+  }, [refresh, isLoading]);
+  useEffect(() => {
+    fetchApi({ url: `${url}/favoriteMovie`, setData: setFavoriteMovies });
   }, [refresh, isLoading]);
   useEffect(() => {
     fetch(`${baseApi}/listMovies-page1`)
@@ -82,6 +85,7 @@ function App() {
           setMe,
           categories,
           movies,
+          favoriteMovies,
           refresh,
           setRefresh,
           isLoading,

@@ -28,7 +28,7 @@ export default function Result({ data, content, buttons }) {
                       }}
                       onMouseLeave={() => setOnMouse(false)}
                       style={{ opacity: onMouse && index === idx && "0.4" }}
-                      src={`${baseApi}/images/${value.poster}`}
+                      src={value.poster}
                       alt=""
                     />
                   </Link>

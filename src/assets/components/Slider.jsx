@@ -71,7 +71,7 @@ export default function Slider({ data, content }) {
                     }}
                     onMouseLeave={() => setOnMouse(false)}
                     style={{ opacity: onMouse && index === idx && "0.4" }}
-                    src={`${baseApi}/images/${value.poster}`}
+                    src={value.poster}
                   />
                 </Link>
                 <Link

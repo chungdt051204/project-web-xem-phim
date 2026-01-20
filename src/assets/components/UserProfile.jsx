@@ -68,11 +68,7 @@ export default function UserProfile() {
         >
           <div className="flex flex-col gap-[5px]">
             <img
-              src={
-                me?.avatar?.includes("https")
-                  ? me.avatar
-                  : `${baseApi}/images/${me.avatar}`
-              }
+              src={me?.avatar}
               alt=""
               referrerPolicy="no-referrer"
               width={150}
@@ -89,17 +85,23 @@ export default function UserProfile() {
           </div>
           <form className="flex flex-col gap-[5px]" onSubmit={handleSubmit}>
             <label htmlFor="Username">Họ tên:</label>
-            <input type="text" ref={fullName} defaultValue={me?.fullName} />
+            <input
+              type="text"
+              ref={fullName}
+              defaultValue={me?.fullName ?? ""}
+              autoComplete="off"
+            />
             <label htmlFor="Username">Tên đăng nhập:</label>
-            <input type="text" value={me?.username} disabled={true} />
+            <input type="text" value={me?.username ?? ""} disabled={true} />
             <label htmlFor="Email">Email:</label>
-            <input type="text" value={me?.email} disabled={true} />
+            <input type="text" value={me?.email ?? ""} disabled={true} />
             <label htmlFor="Password">Mật khẩu:</label>
             <input
               className="text-[14px]"
               type="password"
               ref={password}
               placeholder="Bỏ trống nếu không muốn đổi"
+              autoComplete="new-password"
             />
             {err && <strong className="error">{err}</strong>}
             <label htmlFor="Avatar">Ảnh đại diện:</label>

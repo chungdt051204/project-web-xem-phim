@@ -6,7 +6,6 @@ export default function fetchApi({ url, setData }) {
     })
     .then(({ result }) => {
       setData(result);
-      console.log(result);
     })
     .catch(async (err) => {
       const { message } = await err.json();

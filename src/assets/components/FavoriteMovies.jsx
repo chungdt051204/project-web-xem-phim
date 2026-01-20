@@ -4,20 +4,19 @@ import { baseApi } from "./Register";
 import NavBar from "./NavBar";
 import Dialog from "./Dialog";
 import Footer from "./Footer";
+import fetchApi from "../service/api";
+import { url } from "../../App";
 export default function FavoriteMovies() {
-  const { isLogin } = useContext(AppContext);
+  const { isLogin, me } = useContext(AppContext);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const dialog = useRef();
   useEffect(() => {
-    fetch(`${baseApi}/user`, {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setFavoriteMovies(data.watchList);
-      });
-  }, []);
+    fetchApi({
+      url: `${url}/favoriteMovie?userId=${me?._id}`,
+      setData: setFavoriteMovies,
+    });
+  }, [me]);
   const handleDelete = (id) => {
     if (!isLogin) {
       dialog.current.showModal();
@@ -58,10 +57,10 @@ export default function FavoriteMovies() {
                     >
                       <img
                         className="w-[150px] h-[200px] rounded-[3px]"
-                        src={`${baseApi}/images/${value.poster}`}
+                        src={value.movieId.poster}
                         alt=""
                       />
-                      <div className="h-[50px]">{value.title}</div>
+                      <div className="h-[50px]">{value.movieId.title}</div>
                       <i
                         onClick={() => handleDelete(value.movie_id)}
                         className="fa-solid fa-trash"

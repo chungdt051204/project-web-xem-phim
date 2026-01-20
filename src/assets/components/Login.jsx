@@ -1,42 +1,46 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRef, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import AppContext from "./AppContext";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { baseApi } from "./Register";
+import { url } from "../../App";
 import LoginGoogle from "./LoginGoogle";
+
+const loginSchema = z.object({
+  username: z.string().min(1, "Tên đăng nhập không được bỏ trống"),
+  password: z.string().min(1, "Mật khẩu không được bỏ trống"),
+});
 export default function Login() {
   const navigate = useNavigate();
   const { setIsLogin, setMe } = useContext(AppContext);
-  const [usernameInvalid, setUsernameInvalid] = useState("");
-  const [passwordInvalid, setPasswordInvalid] = useState("");
-  const [loginInvalid, setLoginInvalid] = useState("");
-  const nameRef = useRef();
-  const passwordRef = useRef();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (nameRef.current.value === "") {
-      setUsernameInvalid("Tên đăng nhập không được bỏ trống");
-      //Dừng lại luôn không chạy lệnh fetch
-      return;
-    }
-    if (passwordRef.current.value === "") {
-      setPasswordInvalid("Mật khẩu không được bỏ trống");
-      return;
-    }
-    fetch(`${baseApi}/login`, {
+  const [errorLogin, setErrorLogin] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+  const onSubmit = (data) => {
+    fetch(`${url}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
       body: JSON.stringify({
-        name: nameRef.current.value,
-        password: passwordRef.current.value,
+        username: data?.username,
+        password: data?.password,
       }),
+      credentials: "include",
     })
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
+        if (res.ok) return res.json();
         throw res;
       })
       .then(({ message, result }) => {
@@ -48,47 +52,39 @@ export default function Login() {
       .catch(async (err) => {
         if (err.status === 401) {
           const { message } = await err.json();
-          setLoginInvalid(message);
+          setErrorLogin(message);
         }
       });
   };
+
   return (
     <section className="form-auth-container">
       <div className="form-auth">
         <h2>Đăng nhập</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="name">Tên đăng nhập:</label>
           <input
+            {...register("username")}
             type="text"
-            id="name"
-            name="name"
-            ref={nameRef}
             onChange={() => {
-              setUsernameInvalid("");
+              setErrorLogin("");
             }}
             placeholder="Username"
             autoComplete="off"
           />
-          {usernameInvalid && (
-            <strong className="error">{usernameInvalid}</strong>
-          )}
+          <strong className="error">{errors?.username?.message}</strong>
           <label htmlFor="password">Mật khẩu:</label>
           <input
+            {...register("password")}
             type="password"
-            id="password"
-            name="password"
-            ref={passwordRef}
             onChange={() => {
-              setPasswordInvalid("");
+              setErrorLogin("");
             }}
             placeholder="Password"
             autoComplete="new-password"
           />
-          {passwordInvalid ? (
-            <strong className="error">{passwordInvalid}</strong>
-          ) : (
-            loginInvalid && <strong className="error">{loginInvalid}</strong>
-          )}
+          <strong className="error">{errors?.password?.message}</strong>
+          <strong className="error">{errorLogin ? errorLogin : ""}</strong>
           <button className="btn-form">Đăng nhập</button>
         </form>
         <LoginGoogle />

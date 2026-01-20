@@ -36,7 +36,7 @@ form label {
 form input[type="text"],
 form input[type="password"],
 form input[type="date"] {
-  @apply w-[210px] h-[25px] p-[6px] bg-white rounded-[5px];
+  @apply w-[220px] h-[25px] p-[6px] bg-white rounded-[5px];
 }
 form input[type="file"] {
   @apply w-[85px]  p-[3px] text-white bg-[#008cff] rounded-[5px];

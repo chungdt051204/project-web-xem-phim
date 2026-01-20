@@ -14,8 +14,9 @@ import fetchApi from "../service/api";
 export default function DetailMovie() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const { isLogin } = useContext(AppContext);
+  const { isLogin, me, favoriteMovies } = useContext(AppContext);
   const [movie, setMovie] = useState(null);
+  const [favoriteWithMovieId, setFavoriteWithMovieId] = useState(null);
   const [moviesWithSameGenre, setMoviesWithSameGenre] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const dialog = useRef();
@@ -25,41 +26,28 @@ export default function DetailMovie() {
     const params = new URLSearchParams();
     if (id) params.append("id", id);
     fetchApi({ url: `${url}/movie?${params.toString()}`, setData: setMovie });
-  }, [id]);
-  const handleClick = (movieId, poster, title, rating) => {
-    if (!isLogin && dialog) {
-      dialog.current.showModal();
-      return;
-    }
-    fetch(`${url}/favorite-movies`, {
+    setFavoriteWithMovieId(
+      favoriteMovies?.find(
+        (value) => value.movieId._id === id && value.userId === me?._id
+      )
+    );
+  }, [me, id, favoriteMovies]);
+  const handleAddFavoriteMovie = (movie) => {
+    fetch(`${url}/favoriteMovie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        data: {
-          movie_id: movieId,
-          poster: poster,
-          title: title,
-          rating: rating,
-        },
-      }),
-      credentials: "include",
+      body: JSON.stringify({ userId: me._id, movieId: movie._id }),
     })
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
+        if (res.ok) return res.json();
         throw res;
       })
-      .then(() => {
-        dialog.current.showModal();
+      .then(({ message }) => {
+        alert(message);
       })
-      .catch((err) => {
-        if (err.status === 401) {
-          console.log("Bạn chưa đăng nhập");
-        }
-      });
+      .catch();
   };
   return (
     <>
@@ -73,7 +61,7 @@ export default function DetailMovie() {
             <div className="flex gap-[30px]">
               <img
                 className="rounded-[4px] w-[200px] h-[300px]"
-                src={`${url}/images/${movie.poster}`}
+                src={movie.poster}
                 alt=""
               />
               <div>
@@ -141,14 +129,21 @@ export default function DetailMovie() {
               </div>
             </div>
           )}
-          <button
-            className="btn-add my-[20px]"
-            onClick={() =>
-              handleClick(movie._id, movie.poster, movie.title, movie.rating)
-            }
-          >
-            Thêm vào danh sách yêu thích
-          </button>
+          {favoriteWithMovieId ? (
+            <button
+              className="bg-red-700 p-[8px] my-[20px] rounded-[3px] cursor-not-allowed"
+              disabled={true}
+            >
+              Đã thêm vào danh sách yêu thích
+            </button>
+          ) : (
+            <button
+              className="btn-add my-[20px]"
+              onClick={() => handleAddFavoriteMovie(movie)}
+            >
+              Thêm vào danh sách yêu thích
+            </button>
+          )}
           <ReactPlayer
             style={{ margin: "auto" }}
             src={movie?.videoUrl}
