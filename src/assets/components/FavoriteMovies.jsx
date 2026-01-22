@@ -1,8 +1,7 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import AppContext from "./AppContext";
 import { baseApi } from "./Register";
 import NavBar from "./NavBar";
-import Dialog from "./Dialog";
 import Footer from "./Footer";
 import fetchApi from "../service/api";
 import { url } from "../../App";
@@ -10,7 +9,6 @@ export default function FavoriteMovies() {
   const { isLogin, me } = useContext(AppContext);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
-  const dialog = useRef();
   useEffect(() => {
     fetchApi({
       url: `${url}/favoriteMovie?userId=${me?._id}`,
@@ -19,24 +17,23 @@ export default function FavoriteMovies() {
   }, [me]);
   const handleDelete = (id) => {
     if (!isLogin) {
-      dialog.current.showModal();
+      alert("Bạn chưa đăng nhập");
       return;
     }
-    setFavoriteMovies(favoriteMovies.filter((item) => item.movie_id !== id));
-    fetch(`${baseApi}/favorite-movies/${id}`, {
+    fetch(`${url}/favoriteMovie?id=${id}`, {
       method: "DELETE",
-      credentials: "include",
     })
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
+        if (res.ok) return res.json();
         throw res;
       })
-      .then(() => {
-        dialog.current.showModal();
+      .then(({ message }) => {
+        alert(message);
       })
-      .catch();
+      .catch(async (err) => {
+        const { message } = await err.json();
+        console.log(message);
+      });
   };
   return (
     <section className=" text-white">
@@ -62,7 +59,7 @@ export default function FavoriteMovies() {
                       />
                       <div className="h-[50px]">{value.movieId.title}</div>
                       <i
-                        onClick={() => handleDelete(value.movie_id)}
+                        onClick={() => handleDelete(value._id)}
                         className="fa-solid fa-trash"
                       ></i>
                     </div>
@@ -72,14 +69,6 @@ export default function FavoriteMovies() {
           </div>
         </div>
       </div>
-      <Dialog
-        ref={dialog}
-        message={
-          !isLogin
-            ? "Vui lòng đăng nhập để sử dụng chức năng này"
-            : "Đã xóa phim khỏi danh sách yêu thích"
-        }
-      />
       <Footer />
     </section>
   );

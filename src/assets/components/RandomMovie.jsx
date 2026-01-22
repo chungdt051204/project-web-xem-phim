@@ -40,7 +40,7 @@ export default function RandomMovie() {
               onMouseLeave={() => setOnMouse(false)}
               className="w-[150px] h-[200px] rounded-[3px]"
               style={{ opacity: onMouse && 0.5 }}
-              src={`${url}/images/${randomMovie.poster}`}
+              src={randomMovie.poster}
               alt=""
             />
             <Link
