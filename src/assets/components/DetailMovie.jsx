@@ -10,6 +10,7 @@ import NavBar from "./NavBar";
 import Dialog from "./Dialog";
 import Footer from "./Footer";
 import fetchApi from "../service/api";
+import img from "../../../public/liked.jpg";
 
 export default function DetailMovie() {
   const [searchParams] = useSearchParams();
@@ -21,6 +22,7 @@ export default function DetailMovie() {
   const [userComment, setUserComment] = useState([]);
   const [moviesWithSameGenre, setMoviesWithSameGenre] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [ratingStar, setRatingStar] = useState();
   const input = useRef();
   const dialog = useRef();
@@ -29,7 +31,7 @@ export default function DetailMovie() {
   const getTimeComment = (time) => {
     const now = new Date();
     const past = new Date(time);
-    const secondDiff = Math.floor(now - past) / 1000;
+    const secondDiff = Math.floor((now - past) / 1000);
     const minuteDiff = Math.floor(secondDiff / 60);
     const hourDiff = Math.floor(minuteDiff / 60);
     const dayDiff = Math.floor(hourDiff / 24);
@@ -83,29 +85,34 @@ export default function DetailMovie() {
       .catch();
   };
   const handleAddRatingStar = (star) => {
-    if (userRating) return;
-    else {
-      setRatingStar(star);
-      fetch(`${url}/rating`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: me?._id,
-          movieId: id,
-          rating: star,
-        }),
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw res;
+    if (!isLogin) {
+      alert("Bạn chưa đăng nhập");
+      return;
+    } else {
+      if (userRating) return;
+      else {
+        setRatingStar(star);
+        fetch(`${url}/rating`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: me?._id,
+            movieId: id,
+            rating: star,
+          }),
         })
-        .then(({ message }) => {
-          alert(message);
-          setRefresh((prev) => prev + 1);
-        })
-        .catch();
+          .then((res) => {
+            if (res.ok) return res.json();
+            throw res;
+          })
+          .then(({ message }) => {
+            alert(message);
+            setRefresh((prev) => prev + 1);
+          })
+          .catch();
+      }
     }
   };
   const handleAddComment = (e) => {
@@ -131,6 +138,35 @@ export default function DetailMovie() {
         .then(({ message }) => {
           alert(message);
           input.current.value = "";
+          setRefresh((prev) => prev + 1);
+        })
+        .catch();
+    }
+  };
+  const toggleLike = (value) => {
+    if (!isLogin) {
+      alert("Bạn chưa đăng nhập");
+      return;
+    } else {
+      const status = value.likes.includes(me?._id) ? "unliked" : "liked";
+      fetch(`${url}/comment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          commentId: value._id,
+          userId: me?._id,
+          status: status,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw res;
+        })
+        .then(({ message }) => {
+          console.log(message);
+
           setRefresh((prev) => prev + 1);
         })
         .catch();
@@ -247,7 +283,7 @@ export default function DetailMovie() {
           <Slider data={moviesWithSameGenre} content="Phim liên quan" />
         )}
       </div>
-      <div className="w-[1000px] h-[900px] mx-auto mt-[30px] p-[20px] bg-white">
+      <div className="w-[600px] h-[900px] mt-[30px] mx-[40px] p-[20px] rounded-[8px] bg-white">
         <form
           onSubmit={handleAddComment}
           className="max-w-sm p-4 bg-white rounded-xl shadow-md border border-gray-100"
@@ -295,15 +331,57 @@ export default function DetailMovie() {
             </button>
           </div>
         </form>
-        {userComment?.map((value, index) => {
-          return (
-            <div key={index}>
-              <div>{value.userId.username}</div>
-              <div>{value.comment}</div>
-              <div>{getTimeComment(value.createdAt)}</div>
-            </div>
-          );
-        })}
+        <div className="mt-[30px]">
+          {userComment?.map((value, index) => {
+            return (
+              <div key={index} className="flex gap-3 mb-6 items-start">
+                {/* Avatar với bo tròn và hiệu ứng shadow nhẹ */}
+                <img
+                  src={value.userId.avatar}
+                  alt={value.userId.username}
+                  width={40}
+                  height={40}
+                  referrerPolicy="no-referrer"
+                  className="w-10 h-10 rounded-full object-cover shadow-sm border border-gray-100"
+                />
+
+                <div className="flex-1">
+                  {/* Bong bóng bình luận */}
+                  <div className="bg-gray-100 p-3 rounded-2xl rounded-tl-none">
+                    <div className="font-bold text-sm text-gray-900 mb-1">
+                      {value.userId.username}
+                    </div>
+                    <div className="text-gray-700 text-sm leading-relaxed">
+                      {value.comment}
+                    </div>
+                  </div>
+
+                  {/* Thông tin thời gian và nút tương tác bổ sung */}
+                  <div className="flex gap-4 ml-2 mt-1 items-center">
+                    <span className="text-xs text-gray-500">
+                      {getTimeComment(value.createdAt)}
+                    </span>
+                    <button
+                      onClick={() => toggleLike(value)}
+                      style={{
+                        color: value.likes.includes(me?._id) ? "blue" : "gray",
+                      }}
+                      className="text-xs font-semibold hover:underline cursor-pointer"
+                    >
+                      Thích
+                    </button>
+                    {value.likes.length > 0 && (
+                      <div className="flex">
+                        <div>{value.likes.length}</div>
+                        <img src={img} alt="" width={20} height={20} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <Dialog
         ref={dialog}

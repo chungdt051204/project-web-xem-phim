@@ -25,6 +25,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [ratings, setRatings] = useState([]);
+  const [comments, setComments] = useState([]);
   const [moviesPage1, setMoviesPage1] = useState([]);
   const [moviesPage2, setMoviesPage2] = useState([]);
   const [moviePage3, setMoviePage3] = useState([]);
@@ -59,6 +60,9 @@ function App() {
     fetchApi({ url: `${url}/rating`, setData: setRatings });
   }, [refresh, isLoading]);
   useEffect(() => {
+    fetchApi({ url: `${url}/comment`, setData: setComments });
+  }, [refresh, isLoading]);
+  useEffect(() => {
     fetch(`${baseApi}/listMovies-page1`)
       .then((res) => res.json())
       .then((data) => {
@@ -91,6 +95,7 @@ function App() {
           movies,
           favoriteMovies,
           ratings,
+          comments,
           refresh,
           setRefresh,
           isLoading,
