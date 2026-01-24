@@ -111,6 +111,8 @@ function App() {
                 content2={
                   <Result
                     data={moviesPage1}
+                    containerWidth={800}
+                    contentWidth={680}
                     content="Tất cả phim"
                     buttons={<Pagination />}
                   />
@@ -126,6 +128,8 @@ function App() {
                 content2={
                   <Result
                     data={moviesPage2}
+                    containerWidth={800}
+                    contentWidth={680}
                     content="Tất cả phim"
                     buttons={<Pagination />}
                   />
@@ -141,6 +145,8 @@ function App() {
                 content2={
                   <Result
                     data={moviePage3}
+                    containerWidth={800}
+                    contentWidth={680}
                     content="Tất cả phim"
                     buttons={<Pagination />}
                   />

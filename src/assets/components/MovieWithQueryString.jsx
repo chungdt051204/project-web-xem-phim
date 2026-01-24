@@ -25,6 +25,8 @@ export default function MovieWithQueryString() {
       <Result
         data={moviesWithQueryString}
         content={`Tìm thấy ${moviesWithQueryString.length} phim`}
+        containerWidth="800"
+        trackWidth="680"
       />
     </>
   );

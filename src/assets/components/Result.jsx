@@ -1,17 +1,29 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { baseApi } from "./Register";
-export default function Result({ data, content, buttons }) {
+export default function Result({
+  data,
+  content,
+  containerWidth,
+  contentWidth,
+  buttons,
+}) {
   const [onMouse, setOnMouse] = useState(false);
   const [idx, setIdx] = useState(0);
   return (
-    <section className="flex flex-col gap-[10px] w-[800px] mt-[10px] ms-[40px] ">
+    <section
+      style={{ width: containerWidth }}
+      className="flex flex-col gap-[10px]  mt-[10px] ms-[40px]"
+    >
       <h2 className="text-[28px]">{content}</h2>
       <div
         className="flex flex-col gap-[30px] py-[30px] px-0 rounded-[5px]"
         style={{ backgroundColor: "rgba(15, 20, 22, 1)" }}
       >
-        <div className="flex flex-wrap gap-[20px] w-[680px] mx-auto">
+        <div
+          style={{ width: contentWidth }}
+          className="flex flex-wrap gap-[20px] mx-auto"
+        >
           {data.length > 0 ? (
             data.map((value, index) => {
               return (

@@ -11,6 +11,7 @@ import Dialog from "./Dialog";
 import Footer from "./Footer";
 import fetchApi from "../service/api";
 import img from "../../../public/liked.jpg";
+import Result from "./Result";
 
 export default function DetailMovie() {
   const [searchParams] = useSearchParams();
@@ -22,8 +23,9 @@ export default function DetailMovie() {
   const [userComment, setUserComment] = useState([]);
   const [moviesWithSameGenre, setMoviesWithSameGenre] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [ratingStar, setRatingStar] = useState();
+  const [idx, setIdx] = useState(-1);
   const input = useRef();
   const dialog = useRef();
   //Tạo mảng có 10 phần tử
@@ -59,6 +61,10 @@ export default function DetailMovie() {
     const params = new URLSearchParams();
     if (id) params.append("id", id);
     fetchApi({ url: `${url}/movie?${params.toString()}`, setData: setMovie });
+    fetchApi({
+      url: `${url}/relationMovie?id=${id}&genreId=${movie?.genre[0]._id}`,
+      setData: setMoviesWithSameGenre,
+    });
     fetchApi({ url: `${url}/comment?id=${id}`, setData: setUserComment });
     setFavoriteWithMovieId(
       favoriteMovies?.find(
@@ -66,7 +72,7 @@ export default function DetailMovie() {
       )
     );
     setRatingStar(userRating?.rating);
-  }, [me, id, favoriteMovies, userRating, refresh]);
+  }, [me, id, movie, favoriteMovies, userRating, refresh]);
   const handleAddFavoriteMovie = (movie) => {
     fetch(`${url}/favoriteMovie`, {
       method: "POST",
@@ -148,7 +154,9 @@ export default function DetailMovie() {
       alert("Bạn chưa đăng nhập");
       return;
     } else {
-      const status = value.likes.includes(me?._id) ? "unliked" : "liked";
+      const status = value.likes.some((item) => item._id === me?._id)
+        ? "unliked"
+        : "liked";
       fetch(`${url}/comment`, {
         method: "PUT",
         headers: {
@@ -278,109 +286,148 @@ export default function DetailMovie() {
           />
         </div>
       </section>
-      <div>
-        {moviesWithSameGenre && (
-          <Slider data={moviesWithSameGenre} content="Phim liên quan" />
-        )}
-      </div>
-      <div className="w-[600px] h-[900px] mt-[30px] mx-[40px] p-[20px] rounded-[8px] bg-white">
-        <form
-          onSubmit={handleAddComment}
-          className="max-w-sm p-4 bg-white rounded-xl shadow-md border border-gray-100"
-        >
-          <div className="text-gray-800 font-medium mb-2">Đánh giá của bạn</div>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex gap-1">
-              {star?.map((_, index) => (
-                <div key={index}>
-                  <i
-                    className="fa-solid fa-star text-2xl transition-all duration-200 cursor-pointer"
-                    onClick={() => handleAddRatingStar(index + 1)}
-                    style={{
-                      color: index <= ratingStar - 1 ? "#facd12" : "#d1d5db",
-                      cursor: userRating && "not-allowed",
-                    }}
-                  ></i>
-                </div>
-              ))}
+      <div className="flex">
+        <div className="w-[500px] h-[900px] mt-[30px] mx-[40px] p-[20px] rounded-[8px] bg-white">
+          <form
+            onSubmit={handleAddComment}
+            className="max-w-sm p-4 bg-white rounded-xl shadow-md border border-gray-100"
+          >
+            <div className="text-gray-800 font-medium mb-2">
+              Đánh giá của bạn
             </div>
-            {userRating && (
-              <button
-                type="button"
-                className="text-xs text-blue-600 font-medium hover:underline"
-              >
-                Chỉnh sửa
-              </button>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <input
-              type="text"
-              ref={input}
-              placeholder="Bình luận của bạn..."
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-            />
-
-            <button
-              type="submit"
-              className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition-colors shadow-sm"
-            >
-              Gửi bình luận
-            </button>
-          </div>
-        </form>
-        <div className="mt-[30px]">
-          {userComment?.map((value, index) => {
-            return (
-              <div key={index} className="flex gap-3 mb-6 items-start">
-                {/* Avatar với bo tròn và hiệu ứng shadow nhẹ */}
-                <img
-                  src={value.userId.avatar}
-                  alt={value.userId.username}
-                  width={40}
-                  height={40}
-                  referrerPolicy="no-referrer"
-                  className="w-10 h-10 rounded-full object-cover shadow-sm border border-gray-100"
-                />
-
-                <div className="flex-1">
-                  {/* Bong bóng bình luận */}
-                  <div className="bg-gray-100 p-3 rounded-2xl rounded-tl-none">
-                    <div className="font-bold text-sm text-gray-900 mb-1">
-                      {value.userId.username}
-                    </div>
-                    <div className="text-gray-700 text-sm leading-relaxed">
-                      {value.comment}
-                    </div>
-                  </div>
-
-                  {/* Thông tin thời gian và nút tương tác bổ sung */}
-                  <div className="flex gap-4 ml-2 mt-1 items-center">
-                    <span className="text-xs text-gray-500">
-                      {getTimeComment(value.createdAt)}
-                    </span>
-                    <button
-                      onClick={() => toggleLike(value)}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex gap-1">
+                {star?.map((_, index) => (
+                  <div key={index}>
+                    <i
+                      className="fa-solid fa-star text-2xl transition-all duration-200 cursor-pointer"
+                      onClick={() => handleAddRatingStar(index + 1)}
                       style={{
-                        color: value.likes.includes(me?._id) ? "blue" : "gray",
+                        color: index <= ratingStar - 1 ? "#facd12" : "#d1d5db",
+                        cursor: userRating && "not-allowed",
                       }}
-                      className="text-xs font-semibold hover:underline cursor-pointer"
-                    >
-                      Thích
-                    </button>
-                    {value.likes.length > 0 && (
-                      <div className="flex">
-                        <div>{value.likes.length}</div>
-                        <img src={img} alt="" width={20} height={20} />
+                    ></i>
+                  </div>
+                ))}
+              </div>
+              {userRating && (
+                <button
+                  type="button"
+                  className="text-xs text-blue-600 font-medium hover:underline"
+                >
+                  Chỉnh sửa
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <input
+                type="text"
+                ref={input}
+                placeholder="Bình luận của bạn..."
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition-colors shadow-sm"
+              >
+                Gửi bình luận
+              </button>
+            </div>
+          </form>
+          <div className="mt-[30px]">
+            {userComment?.map((value, index) => {
+              return (
+                <div key={index} className="flex gap-3 mb-6 items-start">
+                  {/* Avatar với bo tròn và hiệu ứng shadow nhẹ */}
+                  <img
+                    src={value.userId.avatar}
+                    alt={value.userId.username}
+                    width={40}
+                    height={40}
+                    referrerPolicy="no-referrer"
+                    className="w-10 h-10 rounded-full object-cover shadow-sm border border-gray-100"
+                  />
+
+                  <div className="flex-1">
+                    {/* Bong bóng bình luận */}
+                    <div className="bg-gray-100 p-3 rounded-2xl rounded-tl-none">
+                      <div className="font-bold text-sm text-gray-900 mb-1">
+                        {value.userId.username}
                       </div>
-                    )}
+                      <div className="text-gray-700 text-sm leading-relaxed">
+                        {value.comment}
+                      </div>
+                    </div>
+
+                    {/* Thông tin thời gian và nút tương tác bổ sung */}
+                    <div className="flex gap-4 ml-2 mt-1 items-center">
+                      <span className="text-xs text-gray-500">
+                        {getTimeComment(value.createdAt)}
+                      </span>
+                      <button
+                        onClick={() => toggleLike(value)}
+                        style={{
+                          color: value.likes.some(
+                            (item) => item._id === me?._id
+                          )
+                            ? "blue"
+                            : "gray",
+                        }}
+                        className="text-xs font-semibold hover:underline cursor-pointer"
+                      >
+                        Thích
+                      </button>
+                      {value.likes.length > 0 && (
+                        <div className="flex">
+                          <div>{value.likes.length}</div>
+                          <img
+                            className="relative"
+                            onMouseEnter={() => {
+                              setIsHovered(true);
+                              setIdx(index);
+                            }}
+                            onMouseLeave={() => {
+                              setIsHovered(false);
+                              setIdx(-1);
+                            }}
+                            src={img}
+                            alt=""
+                            width={20}
+                            height={20}
+                          />
+                        </div>
+                      )}
+                      {isHovered && index === idx && (
+                        <div
+                          className="absolute left-[250px] z-20 min-w-[100px] 
+                  bg-black text-white p-2 rounded-md shadow-lg text-[11px]"
+                        >
+                          {value.likes?.map((item, i) => (
+                            <div key={i} className="whitespace-nowrap">
+                              {item.username}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        </div>
+        <div>
+          {moviesWithSameGenre && (
+            <Result
+              containerWidth={600}
+              contentWidth={500}
+              data={moviesWithSameGenre}
+              content="Phim liên quan"
+            />
+          )}
         </div>
       </div>
       <Dialog
