@@ -1,12 +1,16 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../components/AppContext";
 import AdminNavBar from "../components/AdminNavBar";
 import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "../../App";
 import { toast } from "react-toastify";
+import Pagination from "../components/Pagination";
+import fetchApi from "../service/api";
 export default function QuanLyBinhLuan() {
-  const { isLoading, isLogin, refresh, setRefresh, me, comments } =
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page");
+  const { isLoading, isLogin, refresh, setRefresh, me, comments, setComments } =
     useContext(AppContext);
   const navigate = useNavigate();
   useEffect(() => {
@@ -21,6 +25,14 @@ export default function QuanLyBinhLuan() {
       }
     }
   }, [isLoading, isLogin, me, navigate]);
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (page) params.append("_page", page);
+    fetchApi({
+      url: `${api}/comment?${params.toString()}&_limit=10`,
+      setData: setComments,
+    });
+  }, [refresh, page, setComments]);
   const handleToggleBanned = (value) => {
     const isBanned = value.isBanned ? false : true;
     fetch(`${api}/admin/comment?id=${value._id}`, {
@@ -132,6 +144,9 @@ export default function QuanLyBinhLuan() {
               ))}
             </tbody>
           </table>
+          <div className="w-[500px] m-auto">
+            <Pagination totalPages={comments?.totalPages} />
+          </div>
         </div>
       </div>
       <Footer />

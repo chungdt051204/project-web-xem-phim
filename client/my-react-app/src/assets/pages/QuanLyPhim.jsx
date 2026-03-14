@@ -70,7 +70,7 @@ export default function QuanLyPhim() {
     if (isAdmin) {
       const params = new URLSearchParams();
       if (page) params.append("_page", page);
-      if (order) params.append("sortBy", "createdAt");
+      if (order) params.append("sortBy", "year");
       if (order === "oldest") params.append("orderBy", "desc");
       if (order === "newest") params.append("orderBy", "asc");
       if (year) params.append("year", year);

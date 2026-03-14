@@ -20,7 +20,7 @@ export default function FavoriteMovies() {
       return;
     }
     if (!isLoading) {
-      if (!isLogin || me?.role !== "admin") {
+      if (!isLogin) {
         navigate("/");
         return;
       }

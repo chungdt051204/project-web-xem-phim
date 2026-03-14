@@ -78,7 +78,7 @@ function App() {
     fetchApi({ url: `${api}/rating`, setData: setRatings });
   }, [refresh, isLoading]);
   useEffect(() => {
-    fetchApi({ url: `${api}/comment`, setData: setComments });
+    fetchApi({ url: `${api}/comment?_limit=10`, setData: setComments });
   }, [refresh, isLoading]);
 
   return (
@@ -101,6 +101,7 @@ function App() {
           favoriteMovies,
           ratings,
           comments,
+          setComments,
         }}
       >
         <Routes>

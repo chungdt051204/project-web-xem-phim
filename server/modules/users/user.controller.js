@@ -154,15 +154,10 @@ exports.getMe = async (req, res) => {
 };
 exports.putMe = async (req, res) => {
   try {
-    const session = sessions[req.cookies.sessionId];
+    const { user_id } = req.query;
     const { body } = req;
-    if (!session) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
     await userEntity.updateOne(
-      { _id: session.id },
+      { _id: user_id },
       { ...body, avatar: req?.file?.path }
     );
     return res.status(200).json({

@@ -13,13 +13,13 @@ exports.getMovie = async (req, res) => {
     const {
       _page = 1,
       _limit = arrayMovie.length,
-      sortBy,
+      sortBy = "createdAt",
       orderBy,
     } = req.query;
     const options = {
       page: _page,
       limit: _limit,
-      sort: orderBy === "desc" ? "-" + sortBy : sortBy, //Dấu - là giảm dần, + là tăng dần
+      sort: orderBy === "desc" ? sortBy : "-" + sortBy, //Dấu - là giảm dần, + là tăng dần
       populate: "genre",
     };
     let query = {};

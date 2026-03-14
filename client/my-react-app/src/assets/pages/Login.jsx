@@ -26,6 +26,7 @@ export default function Login() {
       input: "",
       password: "",
     },
+    mode: "onTouched",
   });
   const onSubmit = (data) => {
     fetch(`${api}/login`, {
