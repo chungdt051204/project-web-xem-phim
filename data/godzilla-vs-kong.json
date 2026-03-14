@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef8888"
+  },
+  "title": "Godzilla vs. Kong",
+  "description": "Hai huyền thoại Godzilla và Kong đối đầu trong một trận chiến khốc liệt, trong khi nhân loại khám phá những bí ẩn ẩn giấu sâu trong Trái Đất.",
+  "thumbnail": "1756676660003_thumbnail4.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=X61a9U9-2Ag",
+  "genre": [
+    "Khoa học viễn tưởng",
+    "Hành động",
+    "Giật gân"
+  ],
+  "isFeatured": true,
+  "year": 2021,
+  "duration": "1h 53m",
+  "rating": 7.6,
+  "director": "Adam Wingard",
+  "poster": "1756676660008_poster4.webp"
+}

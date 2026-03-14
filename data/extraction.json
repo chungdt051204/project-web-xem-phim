@@ -1,0 +1,19 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef9998"
+  },
+  "title": "Extraction",
+  "description": "Một lính đánh thuê cứng rắn được thuê để giải cứu con trai của một trùm tội phạm quốc tế bị bắt cóc, nhưng nhiệm vụ tưởng chừng đơn giản lại biến thành một cuộc chiến sinh tử.",
+  "thumbnail": "1756678129355_thumbnail10.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=STxJQJd03Mo",
+  "genre": [
+    "Hành động",
+    "Giật gân"
+  ],
+  "isFeatured": false,
+  "year": 2020,
+  "duration": "1h 56m",
+  "rating": 6.8,
+  "director": "Sam Hargrave",
+  "poster": "1756678129355_poster10.webp"
+}

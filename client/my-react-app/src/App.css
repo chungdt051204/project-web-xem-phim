@@ -1,0 +1,153 @@
+@import "tailwindcss";
+#root {
+  max-width: 1280px;
+  background-color: rgba(38, 50, 56, 1);
+  font-family: Arial, Helvetica, sans-serif;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.form-auth-container {
+  @apply h-[900px] bg-cover;
+  background-image: url(./assets/background.jpg);
+}
+.form-auth-container > .form-auth {
+  @apply flex flex-col w-[500px] mx-auto;
+}
+.form-auth h2 {
+  @apply text-center text-[24px] font-bold;
+}
+.form-auth > form {
+  @apply flex flex-col gap-[8px] w-[300px] py-[20px] px-[40px] mx-auto my-[5px] rounded-[5px];
+  background: rgba(0, 0, 0, 0.886);
+}
+.form-auth p {
+  @apply text-center text-white;
+}
+.form-auth a {
+  @apply mx-[5px];
+}
+.form-auth a:hover {
+  @apply text-[#008cff];
+}
+form label {
+  @apply text-white;
+}
+.form-auth input[type="text"],
+.search input[type="text"],
+.form-auth input[type="password"],
+.form-auth input[type="date"] {
+  @apply w-[220px] h-[25px] p-[6px] bg-white rounded-[5px];
+}
+
+form input:focus {
+  @apply border-2 border-blue-700 outline-0 scale-y-110;
+}
+
+form .error {
+  @apply text-[12px] text-red-500;
+}
+form .btn-form {
+  @apply w-[60%] h-[40px] my-[20px] mx-auto text-black text-[15px] font-bold border-0 rounded-[1000px] cursor-pointer transition-all duration-300;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+}
+.btn-form:hover {
+  @apply text-white scale-110 transition-all duration-300;
+}
+/* Làm mờ background khi hiện dialog */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(1px);
+}
+a,
+h1,
+h2,
+h4 {
+  @apply text-white decoration-0;
+}
+a > h4,
+a > strong {
+  @apply transition-all duration-300;
+}
+a > h4:hover,
+h4:hover,
+a > strong:hover {
+  @apply opacity-50 transition-all duration-300 cursor-pointer;
+}
+.rating-star {
+  @apply absolute top-[5px] start-[5px] p-[8px] text-[12px] rounded-[1000px];
+  color: yellow;
+  background-color: rgba(0, 0, 0, 0.55);
+}
+.play {
+  @apply absolute w-[55px] h-[55px] top-[70px] start-[50px] border-2 border-white rounded-[50%] cursor-pointer;
+  background-color: rgba(0, 0, 0, 0.607);
+}
+.filter-dropdown-menu {
+  @apply absolute flex flex-wrap gap-[10px] w-[650px] mt-[10px] py-[15px] px-[10px] rounded-[10px] bg-white;
+}
+.filter-dropdown-menu-button {
+  @apply relative flex justify-center items-center py-[5px] px-[15px] 
+  border-0 rounded-[1000px] text-black bg-white transition-all duration-300 
+  cursor-pointer;
+}
+.filter-dropdown-menu-button::after {
+  position: absolute;
+  content: "";
+  width: 102%;
+  height: 107%;
+  border-radius: 1000px;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+  z-index: -1;
+}
+.filter-dropdown-menu-button:hover {
+  @apply text-white z-0 scale-110 transition-all 
+ duration-300;
+}
+.user-dropdown-link {
+  @apply flex items-center gap-[5px];
+}
+.btn-nav,
+.btn-dialog {
+  @apply mx-auto py-[8px] px-[20px] border-0 rounded-[1000px] text-white cursor-pointer transition-all duration-300;
+  background: linear-gradient(to bottom right, #008cff, #e100ff);
+}
+.btn-nav:hover,
+.btn-dialog:hover {
+  @apply text-black scale-110 transition-all duration-300;
+}
+.btn-add,
+.btn-random {
+  @apply p-[8px] text-[16px] text-white border-none rounded-[3px];
+  background-color: rgb(183, 28, 28);
+  transition: 0.3s;
+}
+.btn-add:hover {
+  background-color: rgb(38, 50, 56);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.btn-random:hover {
+  background-color: rgba(183, 28, 28, 0.6);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.btn-pagination {
+  @apply py-[10px] px-[15px] text-[16px] font-bold border-0 rounded-[2px] transition-all duration-300;
+  background-color: rgba(33, 37, 39, 1);
+  color: gainsboro;
+}
+.btn.btn-pagination:hover {
+  @apply text-white cursor-pointer;
+  background-color: rgba(181, 231, 69, 1);
+}
+.fa-trash,
+.fa-pen {
+  @apply text-white transition-all duration-300;
+}
+.fa-trash:hover {
+  @apply text-red-500 transition-all duration-300 cursor-pointer;
+}
+.fa-pen:hover {
+  @apply text-blue-500 transition-all duration-300 cursor-pointer;
+}

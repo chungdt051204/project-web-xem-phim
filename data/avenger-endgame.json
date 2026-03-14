@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef6666"
+  },
+  "title": "Avengers: Endgame",
+  "description": "Sau cú búng tay của Thanos khiến một nửa sinh mạng trong vũ trụ biến mất, các Avengers còn lại tập hợp để đảo ngược mọi chuyện trong trận chiến cuối cùng.",
+  "thumbnail": "1756676862560_thumbnail5.webp",
+  "videoUrl": "Bí ẩn",
+  "genre": [
+    "Hành động",
+    "Phiêu lưu",
+    "Khoa học viễn tưởng"
+  ],
+  "isFeatured": true,
+  "year": 2019,
+  "duration": "3h 1m",
+  "rating": 8.4,
+  "director": "Anthony Russo, Joe Russo",
+  "poster": "1756676862577_poster5.webp"
+}

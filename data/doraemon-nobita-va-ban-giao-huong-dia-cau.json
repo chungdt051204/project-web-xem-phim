@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef2222"
+  },
+  "title": "Doraemon: Nobita và Bản Giao Hưởng Địa Cầu",
+  "description": "Nobita và những người bạn cùng Doraemon bước vào một chuyến phiêu lưu âm nhạc kỳ diệu để cứu Trái Đất khỏi thảm họa, khi âm nhạc dần biến mất khỏi thế giới.",
+  "thumbnail": "1756677939414_thumbnail9.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=Yug8gbDd5EQ",
+  "genre": [
+    "Phiêu lưu",
+    "Hoạt hình",
+    "Gia đình"
+  ],
+  "isFeatured": false,
+  "year": 2024,
+  "duration": "1h 55m",
+  "rating": 7.5,
+  "director": "Kazuaki Imai",
+  "poster": "1756677939419_poster9.png"
+}

@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef1234"
+  },
+  "title": "Người nhện: Trở về nhà",
+  "description": "Peter Parker cố gắng cân bằng giữa cuộc sống học sinh trung học và trách nhiệm của một siêu anh hùng, khi phải đối mặt với kẻ phản diện Vulture.",
+  "thumbnail": "1756677792734_thumbnail1.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=rk-dF1lIbIg",
+  "genre": [
+    "Khoa học viễn tưởng",
+    "Phiêu lưu",
+    "Hành động"
+  ],
+  "isFeatured": false,
+  "year": 2017,
+  "duration": "2h 13m",
+  "rating": 7.4,
+  "director": "Jon Watts",
+  "poster": "1756677792735_poster1.jpg"
+}

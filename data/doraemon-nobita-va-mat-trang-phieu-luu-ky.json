@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef4444"
+  },
+  "title": "Doraemon: Nobita và Mặt Trăng Phiêu Lưu Ký",
+  "description": "Nobita cùng Doraemon và các bạn khám phá bí ẩn về Mặt Trăng sau khi cậu bé tạo ra một vương quốc thỏ trên đó bằng bảo bối của Doraemon.",
+  "thumbnail": "1756677132915_thumbnail7.webp",
+  "videoUrl": "https://www.youtube.com/watch?v=O61aTrlHJRA",
+  "genre": [
+    "Hoạt hình",
+    "Gia đình",
+    "Phiêu lưu"
+  ],
+  "isFeatured": true,
+  "year": 2019,
+  "duration": "1h 51m",
+  "rating": 7.2,
+  "director": "Shinnosuke Yakuwa",
+  "poster": "1756677132918_poster7.jpg"
+}

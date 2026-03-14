@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "68b08be3ac03f966738dac08"
+  },
+  "title": "Dan Da Dan: Tà Nhãn",
+  "description": "Momo và Okarun đến một thị trấn suối nước nóng để điều tra bí ẩn liên quan đến gia đình Jiji, nhưng phát hiện còn nhiều điều kỳ lạ tiềm tàng phía sau bề mặt yên bình đó.",
+  "thumbnail": "1756676985467_thumbnail6.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=zOZyBOM-nL8",
+  "genre": [
+    "Phiêu lưu",
+    "Giả tưởng",
+    "Hoạt hình"
+  ],
+  "isFeatured": true,
+  "year": 2025,
+  "duration": "1h 33m",
+  "rating": 9.1,
+  "director": "Fuga Yamashiro, Abel Góngora",
+  "poster": "1756676985471_poster6.jpg"
+}

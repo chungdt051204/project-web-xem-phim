@@ -1,0 +1,21 @@
+{
+  "_id": {
+    "$oid": "68b4dbfd8d4db545fa43af24"
+  },
+  "title": "Dragon Ball Super: Broly",
+  "description": "Broly là con trai của Paragus, một Saiyan bị lưu đày bởi Vua Vegeta vì tiềm năng sức mạnh của cậu. Broly được sinh ra với sức mạnh quá lớn, khiến Paragus sợ hãi và phải dùng vòng kiểm soát để kìm nén cậu. ",
+  "thumbnail": "1756682887444_thumbnail12.jpg",
+  "videoUrl": "https://www.youtube.com/watch?v=_fikU015Dso",
+  "genre": [
+    "Phiêu lưu",
+    "Hành động",
+    "Khoa học viễn tưởng"
+  ],
+  "isFeatured": false,
+  "year": 2018,
+  "duration": "1h 40m",
+  "rating": 8,
+  "director": "Tatsuya Nagamine",
+  "poster": "1756682887452_poster12.jpg",
+  "__v": 0
+}

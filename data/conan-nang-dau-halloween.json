@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef3333"
+  },
+  "title": "Thám tử lừng danh Conan: Nàng Dâu Halloween",
+  "description": "Trong lễ cưới của Takagi và Sato, một vụ tấn công khủng bố xảy ra khiến Conan cùng cảnh sát Tokyo phải chạy đua với thời gian để ngăn chặn âm mưu nguy hiểm.",
+  "thumbnail": "1756677255589_thumbnail8.webp",
+  "videoUrl": "https://www.youtube.com/watch?v=SqSJPzWvcLc",
+  "genre": [
+    "Hoạt hình",
+    "Bí ẩn",
+    "Tội phạm"
+  ],
+  "isFeatured": true,
+  "year": 2022,
+  "duration": "1h 50m",
+  "rating": 6.9,
+  "director": "Susumu Mitsunaka",
+  "poster": "1756677255594_poster8.jpeg"
+}

@@ -1,0 +1,20 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef9999"
+  },
+  "title": "Thám tử lừng danh Conan: Viên đạn đỏ",
+  "description": "Khi một vụ bắt cóc xảy ra tại lễ khai mạc World Sports Games ở Tokyo, Conan và FBI bắt đầu điều tra âm mưu đằng sau siêu dự án tàu đạn chân không tốc độ cao.",
+  "thumbnail": "1756676468401_thumbnail3.webp",
+  "videoUrl": "https://www.youtube.com/watch?v=lOq4F7tLpxU",
+  "genre": [
+    "Bí ẩn",
+    "Hoạt hình",
+    "Trinh thám"
+  ],
+  "isFeatured": true,
+  "year": 2021,
+  "duration": "1h 50m",
+  "rating": 6.7,
+  "director": "Tomoka Nagaoka",
+  "poster": "1756676468405_poster3.png"
+}

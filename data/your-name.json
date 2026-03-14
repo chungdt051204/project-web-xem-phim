@@ -1,0 +1,19 @@
+{
+  "_id": {
+    "$oid": "66cf1234567890abcdef5678"
+  },
+  "title": "Your Name ",
+  "description": "Một chàng trai và một cô gái xa lạ bất ngờ hoán đổi thân xác, mở ra một câu chuyện tình cảm lãng mạn vượt thời gian và không gian.",
+  "thumbnail": "1756676285971_thumbnail2.avif",
+  "videoUrl": "https://www.youtube.com/watch?v=XYFj1tbkqYw",
+  "genre": [
+    "Hoạt hình",
+    "Lãng mạn"
+  ],
+  "isFeatured": true,
+  "year": 2016,
+  "duration": "1h 46m",
+  "rating": 8.5,
+  "director": "Makoto Shinkai",
+  "poster": "1756676285974_poster2.jpg"
+}
