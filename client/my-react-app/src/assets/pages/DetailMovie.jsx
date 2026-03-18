@@ -114,6 +114,7 @@ export default function DetailMovie() {
       fetch(`${api}/favoriteMovie`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId: me._id, movieId: movie._id }),
@@ -143,6 +144,7 @@ export default function DetailMovie() {
         fetch(`${api}/rating`, {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -175,6 +177,7 @@ export default function DetailMovie() {
       fetch(`${api}/comment`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -209,6 +212,7 @@ export default function DetailMovie() {
       fetch(`${api}/comment`, {
         method: "PUT",
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

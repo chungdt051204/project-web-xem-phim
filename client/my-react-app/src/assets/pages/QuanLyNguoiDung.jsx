@@ -116,6 +116,7 @@ export default function QuanLyNguoiDung() {
     fetch(`${api}/admin/user?id=${userWithId._id}`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ status: status }),

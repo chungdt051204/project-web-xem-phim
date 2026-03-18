@@ -168,6 +168,9 @@ export default function QuanLyPhim() {
       dataToSend.append("thumbnail", thumbnail.current.files[0]);
       fetch(`${api}/movie`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: dataToSend,
       })
         .then((res) => {
@@ -198,6 +201,9 @@ export default function QuanLyPhim() {
   const handleDeleteMovie = () => {
     fetch(`${api}/movie?id=${movieWithId._id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
       .then((res) => {
         if (res.ok) return res.json();
@@ -254,6 +260,9 @@ export default function QuanLyPhim() {
     dataToSend.append("thumbnail", thumbnail.current.files[0]);
     fetch(`${api}/movie?id=${movieId}`, {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: dataToSend,
     })
       .then((res) => {

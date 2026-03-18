@@ -1,9 +1,11 @@
 const favoriteMovieEntity = require("../../models/favoriteMovie.model");
 exports.getFavoriteMovie = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const payload = req.payload;
     let query = {};
-    if (userId) query.userId = userId;
+    if (payload) {
+      query.userId = payload.sub;
+    }
     const favoriteMovie = await favoriteMovieEntity
       .find(query)
       .populate("movieId");

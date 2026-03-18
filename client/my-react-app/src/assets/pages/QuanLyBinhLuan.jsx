@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../components/AppContext";
 import AdminNavBar from "../components/AdminNavBar";
 import Footer from "../components/Footer";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Pagination from "../components/Pagination";
 import fetchApi from "../service/api";
 export default function QuanLyBinhLuan() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const page = searchParams.get("page");
   const { isLoading, isLogin, refresh, setRefresh, me, comments, setComments } =
     useContext(AppContext);
@@ -38,6 +38,7 @@ export default function QuanLyBinhLuan() {
     fetch(`${api}/admin/comment?id=${value._id}`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ isBanned: isBanned }),

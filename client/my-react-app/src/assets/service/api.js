@@ -1,5 +1,11 @@
 export default function fetchApi({ url, setData }) {
-  fetch(`${url}`)
+  const token = localStorage.getItem("token");
+  // Tạo object headers trước
+  const headers = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  fetch(`${url}`, { headers })
     .then((res) => {
       if (res.ok) return res.json();
       throw res;

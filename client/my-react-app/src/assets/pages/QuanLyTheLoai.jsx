@@ -76,6 +76,7 @@ export default function QuanLyTheLoai() {
     fetch(`${api}/genre`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ genreName: genreName }),
@@ -100,6 +101,9 @@ export default function QuanLyTheLoai() {
   const handleDeleteGenre = () => {
     fetch(`${api}/genre?genreId=${genreWithId._id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
       .then((res) => {
         if (res.ok) return res.json();
@@ -143,6 +147,7 @@ export default function QuanLyTheLoai() {
     fetch(`${api}/genre?genreId=${genreId}`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ genreName: genreName }),

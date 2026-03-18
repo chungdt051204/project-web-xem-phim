@@ -28,13 +28,16 @@ export default function FavoriteMovies() {
   }, [isLoading, isLogin, me, navigate]);
   useEffect(() => {
     fetchApi({
-      url: `${api}/favoriteMovie?userId=${me?._id}`,
+      url: `${api}/favoriteMovie`,
       setData: setFavoriteMovies,
     });
   }, [me, refresh]);
   const handleDelete = (id) => {
     fetch(`${api}/favoriteMovie?id=${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
       .then((res) => {
         if (res.ok) return res.json();

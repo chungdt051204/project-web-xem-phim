@@ -128,22 +128,11 @@ exports.getResultLoginGoogle = [
 ];
 exports.getMe = async (req, res) => {
   try {
-    const token = req.headers.authorization.slice(7);
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
-    const [encodedHeader, encodedPayload, tokenSignature] = token.split(".");
-    //Ký lại và so sánh với chữ ký cũ
-    const tokenData = `${encodedHeader}.${encodedPayload}`;
-    const hmac = crypto.createHmac("sha256", JWT_SECRET);
-    const signature = hmac.update(tokenData).digest("base64url");
-    if (signature === tokenSignature) {
-      const payload = JSON.parse(atob(encodedPayload));
-      if (payload.exp < Date.now())
-        return res.status(401).json({ message: "Token đã hết hạn" });
-      const user = await userEntity.findOne({ _id: payload.sub });
-      if (!user)
-        return res.status(404).json({ message: "Không tìm thấy người dùng" });
-      return res.status(200).json({ result: user });
-    }
+    const { sub } = req.payload;
+    const user = await userEntity.findOne({ _id: sub });
+    if (!user)
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    return res.status(200).json({ result: user });
   } catch (error) {
     console.log("Có lỗi xảy ra khi xử lý hàm getMe");
     return res.status(500).json({

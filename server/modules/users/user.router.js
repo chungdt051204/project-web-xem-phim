@@ -15,6 +15,10 @@ const upload = multer({
 });
 const router = express.Router();
 const userController = require("./user.controller");
+const {
+  verifyToken,
+  verifyAuthAdmin,
+} = require("../../middlewares/AuthMidlleware");
 const prefix = "";
 router.post(
   `${prefix}/register`,
@@ -27,8 +31,18 @@ router.get(
   `${prefix}/auth/google/callback`,
   userController.getResultLoginGoogle
 );
-router.get(`${prefix}/me`, userController.getMe);
-router.put(`${prefix}/update`, upload.single("avatar"), userController.putMe);
+router.get(`${prefix}/me`, verifyToken, userController.getMe);
+router.put(
+  `${prefix}/update`,
+  verifyToken,
+  upload.single("avatar"),
+  userController.putMe
+);
 router.get(`${prefix}/user`, userController.getUser);
-router.put(`${prefix}/admin/user`, userController.putStatus);
+router.put(
+  `${prefix}/admin/user`,
+  verifyToken,
+  verifyAuthAdmin,
+  userController.putStatus
+);
 module.exports = router;

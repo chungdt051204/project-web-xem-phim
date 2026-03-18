@@ -52,7 +52,9 @@ export default function UserProfile() {
     );
     fetch(`${api}/update?user_id=${me._id}`, {
       method: "PUT",
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: formData,
     })
       .then((res) => {
